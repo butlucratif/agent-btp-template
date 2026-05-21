@@ -11,7 +11,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
     "geist": "^1.7.0",
-    "next": "15.1.4",
+    "next": "15.1.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "recharts": "^3.8.1"
