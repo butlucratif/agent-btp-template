@@ -502,18 +502,45 @@ class OfficeScene extends Phaser.Scene {
     const bookshelf1 = this.add.sprite(80, 150, 'bookshelf')
     bookshelf1.setScale(1.2)
     bookshelf1.setDepth(2)
+    bookshelf1.setInteractive({ cursor: 'pointer' })
+    bookshelf1.on('pointerdown', () => {
+      this.showNotification('📚 Knowledge is power!', '#3b82f6')
+    })
 
     // Bibliothèque droite
     const bookshelf2 = this.add.sprite(width - 80, 150, 'bookshelf')
     bookshelf2.setScale(1.2)
     bookshelf2.setDepth(2)
+    bookshelf2.setInteractive({ cursor: 'pointer' })
+    bookshelf2.on('pointerdown', () => {
+      this.showNotification('📖 Boost your productivity!', '#3b82f6')
+    })
 
     // === TABLEAUX / PEINTURES sur les murs entre les fenêtres ===
     const paintingPositions = [350, 650, 950, 1250]
-    paintingPositions.forEach((x) => {
+    const paintingTitles = [
+      '🎨 "Flow State" - Abstract collection',
+      '🖼️ "Momentum" - Premium series',
+      '🎭 "Innovation" - Modern art',
+      '✨ "Excellence" - Gold edition',
+    ]
+    paintingPositions.forEach((x, index) => {
       const painting = this.add.sprite(x, 80, 'painting')
       painting.setScale(1.1)
       painting.setDepth(2)
+      painting.setInteractive({ cursor: 'pointer' })
+      painting.on('pointerdown', () => {
+        this.showNotification(paintingTitles[index], '#fbbf24')
+      })
+      // Légère animation de flottement
+      this.tweens.add({
+        targets: painting,
+        y: 78,
+        duration: 3000 + index * 500,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      })
     })
 
     // === HORLOGES MURALES ===
@@ -522,60 +549,163 @@ class OfficeScene extends Phaser.Scene {
     clock1.setScale(1.2)
     clock1.setDepth(3)
 
+    // Animation rotation des aiguilles
+    this.tweens.add({
+      targets: clock1,
+      angle: 360,
+      duration: 60000, // 1 minute pour un tour complet
+      repeat: -1,
+      ease: 'Linear',
+    })
+
     // Horloge sur mur gauche
     const clock2 = this.add.sprite(150, 300, 'clock')
     clock2.setScale(1)
     clock2.setDepth(3)
+
+    // Animation rotation
+    this.tweens.add({
+      targets: clock2,
+      angle: 360,
+      duration: 60000,
+      repeat: -1,
+      ease: 'Linear',
+    })
 
     // === ZONE PAUSE avec machine à café et fontaine ===
     // Machine à café dans le coin haut gauche
     const coffeeMachine = this.add.sprite(120, 250, 'coffeeMachine')
     coffeeMachine.setScale(1.3)
     coffeeMachine.setDepth(4)
+    coffeeMachine.setInteractive({ cursor: 'pointer' })
+    coffeeMachine.on('pointerdown', () => {
+      this.showNotification('☕ Fresh coffee brewing!', '#fbbf24')
+    })
+
+    // Animation de pulsation pour la LED
+    this.tweens.add({
+      targets: coffeeMachine,
+      alpha: 0.85,
+      duration: 1500,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    })
 
     // Fontaine à eau dans le coin haut droit
     const waterCooler = this.add.sprite(width - 120, 250, 'waterCooler')
     waterCooler.setScale(1.3)
     waterCooler.setDepth(4)
+    waterCooler.setInteractive({ cursor: 'pointer' })
+    waterCooler.on('pointerdown', () => {
+      this.showNotification('💧 Stay hydrated!', '#3b82f6')
+    })
+
+    // Animation légère oscillation (simulation de bulles)
+    this.tweens.add({
+      targets: waterCooler,
+      y: 248,
+      duration: 2000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    })
 
     // === MEUBLES DE RANGEMENT ===
     // Classeur gauche
     const cabinet1 = this.add.sprite(120, height - 150, 'cabinet')
     cabinet1.setScale(1.2)
     cabinet1.setDepth(4)
+    cabinet1.setInteractive({ cursor: 'pointer' })
+    cabinet1.on('pointerdown', () => {
+      this.showNotification('🗄️ Archives perfectly organized!', '#10b981')
+    })
 
     // Classeur droit
     const cabinet2 = this.add.sprite(width - 120, height - 150, 'cabinet')
     cabinet2.setScale(1.2)
     cabinet2.setDepth(4)
+    cabinet2.setInteractive({ cursor: 'pointer' })
+    cabinet2.on('pointerdown', () => {
+      this.showNotification('📁 All documents in order!', '#10b981')
+    })
 
     // === PETITES PLANTES sur les meubles ===
     // Plantes sur les bibliothèques
     const plantOnShelf1 = this.add.sprite(80, 100, 'smallPlant')
     plantOnShelf1.setScale(1.5)
     plantOnShelf1.setDepth(5)
+    // Animation balancement
+    this.tweens.add({
+      targets: plantOnShelf1,
+      angle: -2,
+      duration: 2000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    })
 
     const plantOnShelf2 = this.add.sprite(width - 80, 100, 'smallPlant')
     plantOnShelf2.setScale(1.5)
     plantOnShelf2.setDepth(5)
+    this.tweens.add({
+      targets: plantOnShelf2,
+      angle: 2,
+      duration: 2200,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    })
 
     // Plantes sur les classeurs
     const plantOnCabinet1 = this.add.sprite(120, height - 190, 'smallPlant')
     plantOnCabinet1.setScale(1.5)
     plantOnCabinet1.setDepth(5)
+    this.tweens.add({
+      targets: plantOnCabinet1,
+      angle: -2,
+      duration: 2400,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    })
 
     const plantOnCabinet2 = this.add.sprite(width - 120, height - 190, 'smallPlant')
     plantOnCabinet2.setScale(1.5)
     plantOnCabinet2.setDepth(5)
+    this.tweens.add({
+      targets: plantOnCabinet2,
+      angle: 2,
+      duration: 2100,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    })
 
     // Plantes près de la machine à café et fontaine
     const plantNearCoffee = this.add.sprite(150, 280, 'smallPlant')
     plantNearCoffee.setScale(1.3)
     plantNearCoffee.setDepth(5)
+    this.tweens.add({
+      targets: plantNearCoffee,
+      angle: -2,
+      duration: 1900,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    })
 
     const plantNearWater = this.add.sprite(width - 150, 280, 'smallPlant')
     plantNearWater.setScale(1.3)
     plantNearWater.setDepth(5)
+    this.tweens.add({
+      targets: plantNearWater,
+      angle: 2,
+      duration: 2300,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    })
   }
 
   createWorkstations() {
@@ -610,6 +740,16 @@ class OfficeScene extends Phaser.Scene {
       const deskLamp = this.add.sprite(-35, -15, 'deskLamp')
       deskLamp.setScale(1.3)
       container.add(deskLamp)
+
+      // Animation de lueur pulsante pour la lampe
+      this.tweens.add({
+        targets: deskLamp,
+        alpha: 0.85,
+        duration: 2000 + index * 300, // Variation pour chaque lampe
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      })
 
       // Clavier devant l'écran
       const keyboard = this.add.sprite(0, 5, 'keyboard')
@@ -748,6 +888,50 @@ class OfficeScene extends Phaser.Scene {
     } else if (this.interactionIndicator) {
       this.interactionIndicator.setVisible(false)
     }
+  }
+
+  showNotification(message: string, color: string) {
+    if (!this.player) return
+
+    // Capturer les positions du joueur
+    const playerX = this.player.x
+    const playerY = this.player.y
+
+    // Créer une notification temporaire près du joueur
+    const notificationText = this.add.text(playerX, playerY - 80, message, {
+      fontSize: '16px',
+      color: '#ffffff',
+      fontStyle: 'bold',
+      backgroundColor: color,
+      padding: { x: 16, y: 10 },
+    })
+    notificationText.setOrigin(0.5)
+    notificationText.setDepth(1000)
+    notificationText.setAlpha(0)
+
+    // Animation d'apparition
+    this.tweens.add({
+      targets: notificationText,
+      alpha: 1,
+      y: playerY - 100,
+      duration: 300,
+      ease: 'Back.easeOut',
+      onComplete: () => {
+        // Attendre puis disparaître
+        this.time.delayedCall(2000, () => {
+          this.tweens.add({
+            targets: notificationText,
+            alpha: 0,
+            y: playerY - 120,
+            duration: 300,
+            ease: 'Cubic.easeIn',
+            onComplete: () => {
+              notificationText.destroy()
+            },
+          })
+        })
+      },
+    })
   }
 }
 
