@@ -169,6 +169,28 @@ class OfficeScene extends Phaser.Scene {
     // Caméra suit le joueur
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1)
     this.cameras.main.setZoom(1)
+
+    // IMPORTANT: Forcer la désactivation du debug visuel pour tous les sprites
+    this.disableAllDebugGraphics()
+  }
+
+  // Méthode pour désactiver tous les graphiques de debug
+  disableAllDebugGraphics() {
+    // Parcourir tous les game objects de la scène
+    this.children.list.forEach((child) => {
+      // Si l'objet a un input et que le debug est activé, le désactiver
+      if (child instanceof Phaser.GameObjects.Sprite ||
+          child instanceof Phaser.GameObjects.Container) {
+        const gameObject = child as any
+        if (gameObject.input && gameObject.input.hitArea) {
+          // Supprimer toute référence aux graphiques de debug
+          if (gameObject.input.debugGraphic) {
+            gameObject.input.debugGraphic.destroy()
+            gameObject.input.debugGraphic = null
+          }
+        }
+      }
+    })
   }
 
   createInteractionIndicator() {
@@ -950,6 +972,11 @@ export function OfficeGame({ agents }: OfficeGameProps) {
       height: 900,
       backgroundColor: '#0a0118',
       pixelArt: true,
+      render: {
+        antialias: false,
+        pixelArt: true,
+        roundPixels: true,
+      },
       scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
