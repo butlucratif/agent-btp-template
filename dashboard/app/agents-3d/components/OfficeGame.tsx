@@ -169,42 +169,6 @@ class OfficeScene extends Phaser.Scene {
     // Caméra suit le joueur
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1)
     this.cameras.main.setZoom(1)
-
-    // IMPORTANT: Forcer la désactivation du debug visuel pour tous les sprites
-    this.disableAllDebugGraphics()
-  }
-
-  // Méthode pour désactiver tous les graphiques de debug
-  disableAllDebugGraphics() {
-    // Surcharger la méthode drawDebug de l'InputPlugin pour ne rien faire
-    const inputPlugin = this.input as any
-    if (inputPlugin && inputPlugin.drawDebug) {
-      inputPlugin.drawDebug = () => {
-        // Ne rien faire - cela empêche l'affichage des rectangles verts
-      }
-    }
-
-    // Aussi essayer de désactiver via le système de rendu
-    if (inputPlugin && inputPlugin.manager) {
-      const manager = inputPlugin.manager as any
-      if (manager.drawDebug) {
-        manager.drawDebug = () => {
-          // Ne rien faire
-        }
-      }
-    }
-
-    // Nettoyer tous les graphics de debug existants
-    this.children.list.forEach((child) => {
-      const gameObject = child as any
-      if (gameObject.input) {
-        // Forcer hitAreaDebug à undefined
-        if (gameObject.input.hitAreaDebug) {
-          gameObject.input.hitAreaDebug.destroy()
-          gameObject.input.hitAreaDebug = undefined
-        }
-      }
-    })
   }
 
   createInteractionIndicator() {
@@ -538,19 +502,11 @@ class OfficeScene extends Phaser.Scene {
     const bookshelf1 = this.add.sprite(80, 150, 'bookshelf')
     bookshelf1.setScale(1.2)
     bookshelf1.setDepth(2)
-    bookshelf1.setInteractive({ cursor: 'pointer' })
-    bookshelf1.on('pointerdown', () => {
-      this.showNotification('📚 Knowledge is power!', '#3b82f6')
-    })
 
     // Bibliothèque droite
     const bookshelf2 = this.add.sprite(width - 80, 150, 'bookshelf')
     bookshelf2.setScale(1.2)
     bookshelf2.setDepth(2)
-    bookshelf2.setInteractive({ cursor: 'pointer' })
-    bookshelf2.on('pointerdown', () => {
-      this.showNotification('📖 Boost your productivity!', '#3b82f6')
-    })
 
     // === TABLEAUX / PEINTURES sur les murs entre les fenêtres ===
     const paintingPositions = [350, 650, 950, 1250]
@@ -564,10 +520,6 @@ class OfficeScene extends Phaser.Scene {
       const painting = this.add.sprite(x, 80, 'painting')
       painting.setScale(1.1)
       painting.setDepth(2)
-      painting.setInteractive({ cursor: 'pointer' })
-      painting.on('pointerdown', () => {
-        this.showNotification(paintingTitles[index], '#fbbf24')
-      })
       // Légère animation de flottement
       this.tweens.add({
         targets: painting,
@@ -613,10 +565,6 @@ class OfficeScene extends Phaser.Scene {
     const coffeeMachine = this.add.sprite(120, 250, 'coffeeMachine')
     coffeeMachine.setScale(1.3)
     coffeeMachine.setDepth(4)
-    coffeeMachine.setInteractive({ cursor: 'pointer' })
-    coffeeMachine.on('pointerdown', () => {
-      this.showNotification('☕ Fresh coffee brewing!', '#fbbf24')
-    })
 
     // Animation de pulsation pour la LED
     this.tweens.add({
@@ -632,10 +580,6 @@ class OfficeScene extends Phaser.Scene {
     const waterCooler = this.add.sprite(width - 120, 250, 'waterCooler')
     waterCooler.setScale(1.3)
     waterCooler.setDepth(4)
-    waterCooler.setInteractive({ cursor: 'pointer' })
-    waterCooler.on('pointerdown', () => {
-      this.showNotification('💧 Stay hydrated!', '#3b82f6')
-    })
 
     // Animation légère oscillation (simulation de bulles)
     this.tweens.add({
@@ -652,19 +596,11 @@ class OfficeScene extends Phaser.Scene {
     const cabinet1 = this.add.sprite(120, height - 150, 'cabinet')
     cabinet1.setScale(1.2)
     cabinet1.setDepth(4)
-    cabinet1.setInteractive({ cursor: 'pointer' })
-    cabinet1.on('pointerdown', () => {
-      this.showNotification('🗄️ Archives perfectly organized!', '#10b981')
-    })
 
     // Classeur droit
     const cabinet2 = this.add.sprite(width - 120, height - 150, 'cabinet')
     cabinet2.setScale(1.2)
     cabinet2.setDepth(4)
-    cabinet2.setInteractive({ cursor: 'pointer' })
-    cabinet2.on('pointerdown', () => {
-      this.showNotification('📁 All documents in order!', '#10b981')
-    })
 
     // === PETITES PLANTES sur les meubles ===
     // Plantes sur les bibliothèques
@@ -864,12 +800,6 @@ class OfficeScene extends Phaser.Scene {
   update() {
     if (!this.player || !this.cursors || !this.wasd) return
 
-    // IMPORTANT: Désactiver le debug à chaque frame pour empêcher l'affichage des rectangles verts
-    const inputPlugin = this.input as any
-    if (inputPlugin && inputPlugin.displayDebug !== undefined) {
-      inputPlugin.displayDebug = false
-    }
-
     let velocityX = 0
     let velocityY = 0
 
@@ -1000,6 +930,9 @@ export function OfficeGame({ agents }: OfficeGameProps) {
       scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
+      },
+      input: {
+        activePointers: 1,
       },
       scene: OfficeScene,
     }
