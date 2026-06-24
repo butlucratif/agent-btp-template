@@ -51,16 +51,16 @@ export function TriggerButton({ agentName, onTrigger }: TriggerButtonProps) {
       onClick={handleTrigger}
       disabled={loading}
       className={`
-        w-full px-4 py-2.5 rounded-lg font-medium text-sm
-        transition-all duration-200
+        w-full px-5 py-3 rounded-xl font-bold text-sm
+        transition-all duration-300 relative overflow-hidden
         ${
           loading
-            ? 'bg-[#18181b] text-[#52525b] cursor-wait border border-[rgba(255,255,255,0.06)]'
+            ? 'bg-[#18181b]/50 text-[#52525b] cursor-wait border border-[rgba(255,255,255,0.06)]'
             : status === 'success'
-              ? 'bg-[#22c55e] text-white'
+              ? 'bg-gradient-to-r from-[#22c55e] to-[#10b981] text-white shadow-lg shadow-[#22c55e]/30'
               : status === 'error'
-                ? 'bg-[#ef4444] text-white'
-                : 'bg-transparent text-[#7c3aed] border border-[#7c3aed] hover:bg-[#7c3aed] hover:text-white'
+                ? 'bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white shadow-lg shadow-[#ef4444]/30'
+                : 'bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] text-[#0f172a] hover:from-[#f59e0b] hover:to-[#fbbf24] shadow-lg shadow-[#fbbf24]/30 hover:shadow-[#fbbf24]/50 hover:scale-105'
         }
       `}
     >

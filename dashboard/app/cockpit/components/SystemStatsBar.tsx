@@ -57,34 +57,37 @@ export function SystemStatsBar() {
   ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {stats.map((stat, index) => (
         <div
           key={stat.label}
-          className="bg-[#111113] rounded-xl p-6 border border-[rgba(255,255,255,0.06)] relative overflow-hidden"
+          className="group bg-gradient-to-br from-[#1e293b]/40 to-[#0f172a]/40 backdrop-blur-xl rounded-2xl p-8 border border-[#fbbf24]/20 relative overflow-hidden hover:border-[#fbbf24]/40 transition-all duration-300 hover:scale-105"
           style={{
             opacity: mounted ? 1 : 0,
-            transform: mounted ? 'translateY(0)' : 'translateY(8px)',
-            transition: `opacity 0.3s ease ${index * 0.05}s, transform 0.3s ease ${index * 0.05}s`,
+            transform: mounted ? 'translateY(0)' : 'translateY(12px)',
+            transition: `opacity 0.4s ease ${index * 0.08}s, transform 0.4s ease ${index * 0.08}s`,
           }}
         >
-          {/* Subtle separator line on right (except last) */}
-          {index < stats.length - 1 && (
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-12 bg-[rgba(255,255,255,0.04)] hidden lg:block" />
-          )}
+          {/* Premium glow effect on hover */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#fbbf24]/0 to-[#7c3aed]/0 group-hover:from-[#fbbf24]/10 group-hover:to-[#7c3aed]/10 transition-all duration-300 rounded-2xl" />
 
-          <p className="text-xs text-[#52525b] uppercase tracking-wide mb-2 font-medium">{stat.label}</p>
-          <p
-            className={`font-semibold tabular-nums ${
-              stat.type === 'number'
-                ? 'text-3xl text-[#fafafa]'
-                : stat.type === 'time'
-                  ? 'text-lg text-[#a1a1aa] font-mono'
-                  : 'text-2xl text-[#fafafa]'
-            }`}
-          >
-            {stat.value}
-          </p>
+          {/* Gold accent line */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#fbbf24] to-transparent opacity-50" />
+
+          <div className="relative z-10">
+            <p className="text-xs text-[#fbbf24] uppercase tracking-wider mb-3 font-semibold">{stat.label}</p>
+            <p
+              className={`font-bold tabular-nums ${
+                stat.type === 'number'
+                  ? 'text-4xl text-white'
+                  : stat.type === 'time'
+                    ? 'text-xl text-[#e5e7eb] font-mono'
+                    : 'text-3xl text-white'
+              }`}
+            >
+              {stat.value}
+            </p>
+          </div>
         </div>
       ))}
     </div>

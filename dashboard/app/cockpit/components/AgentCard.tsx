@@ -46,34 +46,44 @@ export function AgentCard({ agent, index, onTrigger }: AgentCardProps) {
   return (
     <div
       className={`
-        group relative bg-[#111113] rounded-xl p-6 border transition-all duration-200
-        ${isActive ? 'border-l-2 border-l-[#7c3aed] bg-[#18181b] border-[rgba(255,255,255,0.08)]' : 'border-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.12)]'}
+        group relative bg-gradient-to-br from-[#1e293b]/40 to-[#0f172a]/40 backdrop-blur-xl rounded-2xl p-6 border transition-all duration-300
+        ${isActive ? 'border-[#22c55e]/40 shadow-lg shadow-[#22c55e]/20' : 'border-[#fbbf24]/20 hover:border-[#fbbf24]/40 hover:shadow-lg hover:shadow-[#fbbf24]/10'}
+        hover:scale-[1.02]
       `}
       style={{
         opacity: 0,
-        animation: `fadeInUp 0.4s ease forwards ${index * 0.08}s`,
+        animation: `fadeInUp 0.5s ease forwards ${index * 0.1}s`,
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Premium glow effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#fbbf24]/0 to-[#7c3aed]/0 group-hover:from-[#fbbf24]/5 group-hover:to-[#7c3aed]/5 transition-all duration-300 rounded-2xl" />
+
+      {/* Gold accent line */}
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#fbbf24] to-transparent opacity-30" />
+
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">{agent.icon}</span>
+      <div className="relative z-10 flex items-start justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <div className="text-3xl bg-gradient-to-br from-[#fbbf24]/20 to-[#7c3aed]/20 p-3 rounded-xl">
+            {agent.icon}
+          </div>
           <div>
-            <h3 className="text-sm font-semibold text-[#fafafa]">{agent.displayName}</h3>
-            <p className="text-xs text-[#52525b] font-mono mt-0.5">{agent.name}</p>
+            <h3 className="text-base font-bold text-white">{agent.displayName}</h3>
+            <p className="text-xs text-[#fbbf24]/70 font-mono mt-1">{agent.name}</p>
           </div>
         </div>
 
-        {/* Status indicator - pulse animation only when active */}
+        {/* Premium status indicator */}
         <div className="relative">
+          <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#22c55e]/20 to-[#10b981]/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
           <div
-            className={`w-1.5 h-1.5 rounded-full ${
+            className={`relative w-3 h-3 rounded-full ${
               isActive
-                ? 'bg-[#22c55e]'
+                ? 'bg-[#22c55e] shadow-lg shadow-[#22c55e]/50'
                 : hasError
-                  ? 'bg-[#ef4444]'
+                  ? 'bg-[#ef4444] shadow-lg shadow-[#ef4444]/50'
                   : 'bg-[#52525b]'
             }`}
             style={{
@@ -83,29 +93,30 @@ export function AgentCard({ agent, index, onTrigger }: AgentCardProps) {
         </div>
       </div>
 
-      {/* Metrics */}
-      <div className="space-y-3 mb-5">
-        <div className="flex justify-between items-center">
-          <span className="text-xs text-[#52525b]">Dernière exécution</span>
-          <span className="text-xs text-[#a1a1aa] font-mono tabular-nums">{formatTimeAgo(agent.lastRun)}</span>
+      {/* Metrics with premium styling */}
+      <div className="relative z-10 space-y-4 mb-6">
+        <div className="flex justify-between items-center p-3 rounded-lg bg-[#0f172a]/30 border border-[#fbbf24]/10">
+          <span className="text-xs text-[#fbbf24]/80 uppercase tracking-wide font-semibold">Dernière exécution</span>
+          <span className="text-sm text-white font-mono tabular-nums">{formatTimeAgo(agent.lastRun)}</span>
         </div>
 
-        <div className="flex justify-between items-center">
-          <span className="text-xs text-[#52525b]">Prochaine exécution</span>
-          <span className="text-xs text-[#a1a1aa] font-mono tabular-nums">{formatCountdown(agent.nextRun)}</span>
+        <div className="flex justify-between items-center p-3 rounded-lg bg-[#0f172a]/30 border border-[#7c3aed]/10">
+          <span className="text-xs text-[#a78bfa]/80 uppercase tracking-wide font-semibold">Prochaine exécution</span>
+          <span className="text-sm text-white font-mono tabular-nums">{formatCountdown(agent.nextRun)}</span>
         </div>
 
-        <div className="flex justify-between items-center">
-          <span className="text-xs text-[#52525b]">Actions aujourd'hui</span>
-          <span className="text-sm text-[#fafafa] font-mono font-semibold tabular-nums">{agent.actionsToday}</span>
+        <div className="flex justify-between items-center p-3 rounded-lg bg-gradient-to-r from-[#fbbf24]/10 to-[#f59e0b]/10 border border-[#fbbf24]/20">
+          <span className="text-xs text-[#fbbf24] uppercase tracking-wide font-bold">Actions aujourd'hui</span>
+          <span className="text-2xl text-white font-bold tabular-nums">{agent.actionsToday}</span>
         </div>
       </div>
 
-      {/* Trigger button - appears on hover */}
+      {/* Trigger button - smooth fade in */}
       <div
-        className="transition-opacity duration-200"
+        className="relative z-10 transition-all duration-300"
         style={{
           opacity: isHovered ? 1 : 0,
+          transform: isHovered ? 'translateY(0)' : 'translateY(4px)',
           pointerEvents: isHovered ? 'auto' : 'none',
         }}
       >
