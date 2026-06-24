@@ -33,12 +33,12 @@ export default function Sidebar() {
       {/* Logo / Header */}
       <div className="h-20 flex items-center px-6 border-b border-secondary-800">
         <div className="flex items-center gap-3">
-          {/* Orange square logo with BTP text */}
+          {/* Premium violet square logo with BTP text */}
           <div
             className="w-11 h-11 rounded-lg flex items-center justify-center shadow-md transition-transform hover:scale-105"
             style={{
               backgroundColor: 'var(--color-primary)',
-              boxShadow: '0 0 12px rgba(249, 115, 22, 0.3)'
+              boxShadow: '0 0 12px rgba(124, 58, 237, 0.3)'
             }}
           >
             <span className="text-white font-bold text-lg tracking-tight">

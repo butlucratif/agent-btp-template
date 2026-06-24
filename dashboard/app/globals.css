@@ -8,25 +8,25 @@
 /* BTP Construction Dashboard - Professional Industry Software */
 
 :root {
-  /* Construction Color System */
-  --color-primary:         #F97316;    /* Orange construction */
-  --color-primary-dark:    #EA580C;    /* Darker orange */
-  --color-primary-light:   #FDBA74;    /* Lighter orange */
+  /* Premium Color System */
+  --color-primary:         #7c3aed;    /* Premium violet */
+  --color-primary-dark:    #6d28d9;    /* Darker violet */
+  --color-primary-light:   #a78bfa;    /* Lighter violet */
 
   --color-secondary:       #1C1917;    /* Dark charcoal */
   --color-secondary-light: #292524;    /* Lighter charcoal */
 
   --color-background:      #FAFAF9;    /* Warm white */
   --color-surface:         #ffffff;    /* Pure white for cards */
-  --color-surface-hover:   #FFF7ED;    /* Light orange hover */
+  --color-surface-hover:   #f3f0ff;    /* Light violet hover */
 
   --color-border:          #E7E5E0;    /* Warm gray border */
   --color-border-subtle:   #F5F5F4;    /* Subtle warm border */
   --color-border-dark:     #D6D3D1;    /* Darker border */
 
   /* Accent light for highlights */
-  --color-accent-light:    #FFF7ED;    /* Light orange background */
-  --color-accent-lighter:  #FFEDD5;    /* Even lighter orange */
+  --color-accent-light:    #f5f3ff;    /* Light violet background */
+  --color-accent-lighter:  #faf5ff;    /* Even lighter violet */
 
   /* Text hierarchy - Construction industry professional */
   --color-text-primary:    #1C1917;    /* Dark charcoal */
@@ -36,7 +36,7 @@
   --color-text-inverse:    #FFFFFF;    /* White text for dark backgrounds */
 
   /* Status colors - BTP specific */
-  --color-status-attente:  #F97316;    /* Orange - en_attente */
+  --color-status-attente:  #fbbf24;    /* Gold - en_attente */
   --color-status-accepte:  #10B981;    /* Green - accepte */
   --color-status-refuse:   #EF4444;    /* Red - refuse */
   --color-status-prevu:    #3B82F6;    /* Blue - prevu */

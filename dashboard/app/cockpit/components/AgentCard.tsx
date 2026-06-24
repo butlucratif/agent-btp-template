@@ -47,7 +47,7 @@ export function AgentCard({ agent, index, onTrigger }: AgentCardProps) {
     <div
       className={`
         group relative bg-[#111113] rounded-xl p-6 border transition-all duration-200
-        ${isActive ? 'border-l-2 border-l-[#f97316] bg-[#18181b] border-[rgba(255,255,255,0.08)]' : 'border-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.12)]'}
+        ${isActive ? 'border-l-2 border-l-[#7c3aed] bg-[#18181b] border-[rgba(255,255,255,0.08)]' : 'border-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.12)]'}
       `}
       style={{
         opacity: 0,

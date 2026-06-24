@@ -2,8 +2,20 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { AgentsScene } from './components/AgentsScene'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
+
+const OfficeGame = dynamic(() => import('./components/OfficeGame').then(mod => ({ default: mod.OfficeGame })), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-16 h-16 border-4 border-[#7c3aed] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-[#a1a1aa] text-sm">Chargement du jeu pixel art...</p>
+      </div>
+    </div>
+  ),
+})
 
 interface AgentStatus {
   name: string
@@ -126,8 +138,8 @@ export default function Agents3DPage() {
     return (
       <div className="min-h-screen bg-[#08080a] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#f97316] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-[#a1a1aa] text-sm">Chargement de l'espace 3D...</p>
+          <div className="w-16 h-16 border-4 border-[#7c3aed] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[#a1a1aa] text-sm">Chargement du bureau pixel art...</p>
         </div>
       </div>
     )
@@ -149,7 +161,7 @@ export default function Agents3DPage() {
             </div>
             <Link
               href="/cockpit"
-              className="px-6 py-3 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-xl font-semibold transition-all duration-200 shadow-lg shadow-[#f97316]/20 hover:shadow-[#f97316]/40"
+              className="px-6 py-3 bg-[#7c3aed] hover:bg-[#6d28d9] text-white rounded-xl font-semibold transition-all duration-200 shadow-lg shadow-[#7c3aed]/20 hover:shadow-[#7c3aed]/40"
             >
               ← Retour au Cockpit
             </Link>
@@ -170,7 +182,7 @@ export default function Agents3DPage() {
               <div className="text-sm text-[#52525b]">En cours</div>
             </div>
             <div className="bg-[#111113] rounded-xl p-4 border border-[rgba(255,255,255,0.06)]">
-              <div className="text-2xl font-bold text-[#f97316]">
+              <div className="text-2xl font-bold text-[#fbbf24]">
                 {agents.reduce((sum, a) => sum + a.actionsToday, 0)}
               </div>
               <div className="text-sm text-[#52525b]">Actions aujourd'hui</div>
@@ -185,16 +197,16 @@ export default function Agents3DPage() {
         </div>
       </div>
 
-      {/* Scène 3D */}
+      {/* Scène Pixel Art */}
       <div className="relative" style={{ height: 'calc(100vh - 280px)' }}>
         <div className="absolute inset-0 rounded-2xl overflow-hidden border border-[rgba(255,255,255,0.06)] mx-6">
-          <AgentsScene agents={agents} />
+          <OfficeGame agents={agents} />
         </div>
 
         {/* Instructions overlay */}
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-[#111113]/90 backdrop-blur-sm rounded-xl px-6 py-3 border border-[rgba(255,255,255,0.06)]">
           <p className="text-[#a1a1aa] text-sm text-center">
-            🖱️ Cliquez et faites glisser pour pivoter • 🔍 Molette pour zoomer • ✨ Survolez un agent pour l'agrandir
+            ⌨️ Flèches ou WASD pour se déplacer • 🎮 Explorez le bureau Wall Street • ✨ Agents au travail
           </p>
         </div>
       </div>
