@@ -176,18 +176,32 @@ class OfficeScene extends Phaser.Scene {
 
   // Méthode pour désactiver tous les graphiques de debug
   disableAllDebugGraphics() {
-    // Parcourir tous les game objects de la scène
+    // Surcharger la méthode drawDebug de l'InputPlugin pour ne rien faire
+    const inputPlugin = this.input as any
+    if (inputPlugin && inputPlugin.drawDebug) {
+      inputPlugin.drawDebug = () => {
+        // Ne rien faire - cela empêche l'affichage des rectangles verts
+      }
+    }
+
+    // Aussi essayer de désactiver via le système de rendu
+    if (inputPlugin && inputPlugin.manager) {
+      const manager = inputPlugin.manager as any
+      if (manager.drawDebug) {
+        manager.drawDebug = () => {
+          // Ne rien faire
+        }
+      }
+    }
+
+    // Nettoyer tous les graphics de debug existants
     this.children.list.forEach((child) => {
-      // Si l'objet a un input et que le debug est activé, le désactiver
-      if (child instanceof Phaser.GameObjects.Sprite ||
-          child instanceof Phaser.GameObjects.Container) {
-        const gameObject = child as any
-        if (gameObject.input && gameObject.input.hitArea) {
-          // Supprimer toute référence aux graphiques de debug
-          if (gameObject.input.debugGraphic) {
-            gameObject.input.debugGraphic.destroy()
-            gameObject.input.debugGraphic = null
-          }
+      const gameObject = child as any
+      if (gameObject.input) {
+        // Forcer hitAreaDebug à undefined
+        if (gameObject.input.hitAreaDebug) {
+          gameObject.input.hitAreaDebug.destroy()
+          gameObject.input.hitAreaDebug = undefined
         }
       }
     })
@@ -849,6 +863,12 @@ class OfficeScene extends Phaser.Scene {
 
   update() {
     if (!this.player || !this.cursors || !this.wasd) return
+
+    // IMPORTANT: Désactiver le debug à chaque frame pour empêcher l'affichage des rectangles verts
+    const inputPlugin = this.input as any
+    if (inputPlugin && inputPlugin.displayDebug !== undefined) {
+      inputPlugin.displayDebug = false
+    }
 
     let velocityX = 0
     let velocityY = 0
