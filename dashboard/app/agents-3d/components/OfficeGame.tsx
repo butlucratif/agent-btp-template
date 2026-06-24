@@ -295,6 +295,150 @@ class OfficeScene extends Phaser.Scene {
     }
     windowGraphics.generateTexture('window', 80, 120)
     windowGraphics.destroy()
+
+    // Bibliothèque / Étagère (60x100 pixels)
+    const bookshelfGraphics = this.add.graphics()
+    bookshelfGraphics.fillStyle(0x92400e, 1) // Bois sombre
+    bookshelfGraphics.fillRect(0, 0, 60, 100)
+    bookshelfGraphics.fillStyle(0x78350f, 1)
+    for (let i = 0; i < 4; i++) {
+      bookshelfGraphics.fillRect(4, 20 + i * 20, 52, 2) // Étagères
+    }
+    // Livres colorés
+    const bookColors = [0x3b82f6, 0xef4444, 0x22c55e, 0xfbbf24]
+    for (let shelf = 0; shelf < 4; shelf++) {
+      for (let book = 0; book < 6; book++) {
+        bookshelfGraphics.fillStyle(bookColors[Math.floor(Math.random() * bookColors.length)], 1)
+        bookshelfGraphics.fillRect(6 + book * 8, 22 + shelf * 20, 7, 16)
+      }
+    }
+    bookshelfGraphics.generateTexture('bookshelf', 60, 100)
+    bookshelfGraphics.destroy()
+
+    // Machine à café (40x50 pixels)
+    const coffeeGraphics = this.add.graphics()
+    coffeeGraphics.fillStyle(0x334155, 1)
+    coffeeGraphics.fillRect(0, 10, 40, 40) // Corps
+    coffeeGraphics.fillStyle(0x1e293b, 1)
+    coffeeGraphics.fillRect(5, 15, 30, 8) // Écran
+    coffeeGraphics.fillStyle(0x22c55e, 1)
+    coffeeGraphics.fillCircle(35, 19, 2) // LED verte
+    coffeeGraphics.fillStyle(COLORS.gold, 1)
+    coffeeGraphics.fillRect(15, 30, 10, 15) // Buse
+    coffeeGraphics.fillStyle(0x92400e, 1)
+    coffeeGraphics.fillRect(10, 40, 20, 10) // Tasse
+    coffeeGraphics.generateTexture('coffee_machine', 40, 50)
+    coffeeGraphics.destroy()
+
+    // Fontaine à eau (30x60 pixels)
+    const waterGraphics = this.add.graphics()
+    waterGraphics.fillStyle(0x0ea5e9, 0.3) // Bleu transparent
+    waterGraphics.fillRect(5, 10, 20, 35) // Bonbonne
+    waterGraphics.fillStyle(0xf8fafc, 1)
+    waterGraphics.fillRect(0, 45, 30, 15) // Base
+    waterGraphics.fillStyle(0x38bdf8, 0.5)
+    waterGraphics.fillCircle(15, 27, 8) // Reflet eau
+    waterGraphics.generateTexture('water_cooler', 30, 60)
+    waterGraphics.destroy()
+
+    // Classeur / Meuble de rangement (50x70 pixels)
+    const cabinetGraphics = this.add.graphics()
+    cabinetGraphics.fillStyle(0x475569, 1)
+    cabinetGraphics.fillRect(0, 0, 50, 70)
+    cabinetGraphics.fillStyle(0x334155, 1)
+    for (let i = 0; i < 3; i++) {
+      cabinetGraphics.fillRect(5, 8 + i * 22, 40, 18) // Tiroirs
+      cabinetGraphics.fillStyle(COLORS.gold, 1)
+      cabinetGraphics.fillRect(20, 15 + i * 22, 10, 4) // Poignées dorées
+      cabinetGraphics.fillStyle(0x334155, 1)
+    }
+    cabinetGraphics.generateTexture('cabinet', 50, 70)
+    cabinetGraphics.destroy()
+
+    // Horloge murale (40x40 pixels)
+    const clockGraphics = this.add.graphics()
+    clockGraphics.fillStyle(0x1e293b, 1)
+    clockGraphics.fillCircle(20, 20, 18) // Cadre
+    clockGraphics.fillStyle(0xf8fafc, 1)
+    clockGraphics.fillCircle(20, 20, 15) // Fond
+    clockGraphics.fillStyle(0x1e293b, 1)
+    clockGraphics.fillRect(19, 20, 2, -8) // Aiguille heure
+    clockGraphics.fillRect(19, 20, 2, -12) // Aiguille minute
+    clockGraphics.fillCircle(20, 20, 2) // Centre
+    clockGraphics.generateTexture('clock', 40, 40)
+    clockGraphics.destroy()
+
+    // Tableau / Peinture (70x50 pixels)
+    const paintingGraphics = this.add.graphics()
+    paintingGraphics.fillStyle(0x92400e, 1)
+    paintingGraphics.fillRect(0, 0, 70, 50) // Cadre
+    paintingGraphics.fillStyle(0x1e293b, 1)
+    paintingGraphics.fillRect(4, 4, 62, 42) // Tableau
+    // Abstrait moderne bleu/or
+    paintingGraphics.fillStyle(0x3b82f6, 0.7)
+    paintingGraphics.fillCircle(20, 25, 12)
+    paintingGraphics.fillStyle(COLORS.gold, 0.6)
+    paintingGraphics.fillCircle(50, 20, 10)
+    paintingGraphics.fillStyle(0x60a5fa, 0.5)
+    paintingGraphics.fillRect(30, 15, 15, 25)
+    paintingGraphics.generateTexture('painting', 70, 50)
+    paintingGraphics.destroy()
+
+    // Lampe de bureau (20x35 pixels)
+    const lampGraphics = this.add.graphics()
+    lampGraphics.fillStyle(0xfbbf24, 0.6)
+    lampGraphics.fillCircle(10, 5, 8) // Abat-jour
+    lampGraphics.fillStyle(COLORS.gold, 1)
+    lampGraphics.fillRect(9, 10, 2, 15) // Pied
+    lampGraphics.fillStyle(0x334155, 1)
+    lampGraphics.fillCircle(10, 30, 5) // Base
+    lampGraphics.generateTexture('desk_lamp', 20, 35)
+    lampGraphics.destroy()
+
+    // Tasse de café (12x15 pixels)
+    const cupGraphics = this.add.graphics()
+    cupGraphics.fillStyle(0xfef3c7, 1)
+    cupGraphics.fillRect(2, 5, 8, 10) // Tasse
+    cupGraphics.fillStyle(0x92400e, 0.6)
+    cupGraphics.fillRect(3, 6, 6, 4) // Café
+    cupGraphics.fillRect(10, 8, 2, 4) // Anse
+    cupGraphics.generateTexture('coffee_cup', 12, 15)
+    cupGraphics.destroy()
+
+    // Clavier (30x10 pixels)
+    const keyboardGraphics = this.add.graphics()
+    keyboardGraphics.fillStyle(0x1e293b, 1)
+    keyboardGraphics.fillRect(0, 0, 30, 10)
+    keyboardGraphics.fillStyle(0x334155, 0.5)
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < 3; j++) {
+        keyboardGraphics.fillRect(2 + i * 5, 2 + j * 3, 3, 2)
+      }
+    }
+    keyboardGraphics.generateTexture('keyboard', 30, 10)
+    keyboardGraphics.destroy()
+
+    // Chaise de bureau (30x40 pixels)
+    const chairGraphics = this.add.graphics()
+    chairGraphics.fillStyle(0x1e293b, 1)
+    chairGraphics.fillRect(5, 0, 20, 25) // Dossier
+    chairGraphics.fillRect(0, 22, 30, 8) // Siège
+    chairGraphics.fillStyle(0x475569, 1)
+    chairGraphics.fillRect(13, 30, 4, 8) // Pied
+    chairGraphics.fillCircle(15, 38, 6) // Base roulettes
+    chairGraphics.generateTexture('chair', 30, 40)
+    chairGraphics.destroy()
+
+    // Plante de bureau (petite, 16x20 pixels)
+    const smallPlantGraphics = this.add.graphics()
+    smallPlantGraphics.fillStyle(0x92400e, 1)
+    smallPlantGraphics.fillRect(4, 12, 8, 8) // Pot
+    smallPlantGraphics.fillStyle(0x22c55e, 1)
+    smallPlantGraphics.fillCircle(8, 8, 6) // Feuillage
+    smallPlantGraphics.fillCircle(5, 6, 4)
+    smallPlantGraphics.fillCircle(11, 6, 4)
+    smallPlantGraphics.generateTexture('small_plant', 16, 20)
+    smallPlantGraphics.destroy()
   }
 
   createLuxuryOffice() {
@@ -347,11 +491,91 @@ class OfficeScene extends Phaser.Scene {
 
     // Tapis premium sous la zone de travail (zone centrale)
     const carpetGraphics = this.add.graphics()
-    carpetGraphics.fillStyle(0x7c3aed, 0.15)
+    carpetGraphics.fillStyle(0x3b82f6, 0.15)
     carpetGraphics.fillRect(200, 250, 1200, 500)
     carpetGraphics.lineStyle(4, COLORS.gold, 0.3)
     carpetGraphics.strokeRect(200, 250, 1200, 500)
     carpetGraphics.setDepth(1)
+
+    // === BIBLIOTHÈQUES le long des murs ===
+    // Bibliothèque gauche
+    const bookshelf1 = this.add.sprite(80, 150, 'bookshelf')
+    bookshelf1.setScale(1.2)
+    bookshelf1.setDepth(2)
+
+    // Bibliothèque droite
+    const bookshelf2 = this.add.sprite(width - 80, 150, 'bookshelf')
+    bookshelf2.setScale(1.2)
+    bookshelf2.setDepth(2)
+
+    // === TABLEAUX / PEINTURES sur les murs entre les fenêtres ===
+    const paintingPositions = [350, 650, 950, 1250]
+    paintingPositions.forEach((x) => {
+      const painting = this.add.sprite(x, 80, 'painting')
+      painting.setScale(1.1)
+      painting.setDepth(2)
+    })
+
+    // === HORLOGES MURALES ===
+    // Horloge au centre du mur
+    const clock1 = this.add.sprite(width / 2, 60, 'clock')
+    clock1.setScale(1.2)
+    clock1.setDepth(3)
+
+    // Horloge sur mur gauche
+    const clock2 = this.add.sprite(150, 300, 'clock')
+    clock2.setScale(1)
+    clock2.setDepth(3)
+
+    // === ZONE PAUSE avec machine à café et fontaine ===
+    // Machine à café dans le coin haut gauche
+    const coffeeMachine = this.add.sprite(120, 250, 'coffeeMachine')
+    coffeeMachine.setScale(1.3)
+    coffeeMachine.setDepth(4)
+
+    // Fontaine à eau dans le coin haut droit
+    const waterCooler = this.add.sprite(width - 120, 250, 'waterCooler')
+    waterCooler.setScale(1.3)
+    waterCooler.setDepth(4)
+
+    // === MEUBLES DE RANGEMENT ===
+    // Classeur gauche
+    const cabinet1 = this.add.sprite(120, height - 150, 'cabinet')
+    cabinet1.setScale(1.2)
+    cabinet1.setDepth(4)
+
+    // Classeur droit
+    const cabinet2 = this.add.sprite(width - 120, height - 150, 'cabinet')
+    cabinet2.setScale(1.2)
+    cabinet2.setDepth(4)
+
+    // === PETITES PLANTES sur les meubles ===
+    // Plantes sur les bibliothèques
+    const plantOnShelf1 = this.add.sprite(80, 100, 'smallPlant')
+    plantOnShelf1.setScale(1.5)
+    plantOnShelf1.setDepth(5)
+
+    const plantOnShelf2 = this.add.sprite(width - 80, 100, 'smallPlant')
+    plantOnShelf2.setScale(1.5)
+    plantOnShelf2.setDepth(5)
+
+    // Plantes sur les classeurs
+    const plantOnCabinet1 = this.add.sprite(120, height - 190, 'smallPlant')
+    plantOnCabinet1.setScale(1.5)
+    plantOnCabinet1.setDepth(5)
+
+    const plantOnCabinet2 = this.add.sprite(width - 120, height - 190, 'smallPlant')
+    plantOnCabinet2.setScale(1.5)
+    plantOnCabinet2.setDepth(5)
+
+    // Plantes près de la machine à café et fontaine
+    const plantNearCoffee = this.add.sprite(150, 280, 'smallPlant')
+    plantNearCoffee.setScale(1.3)
+    plantNearCoffee.setDepth(5)
+
+    const plantNearWater = this.add.sprite(width - 150, 280, 'smallPlant')
+    plantNearWater.setScale(1.3)
+    plantNearWater.setDepth(5)
   }
 
   createWorkstations() {
@@ -380,6 +604,32 @@ class OfficeScene extends Phaser.Scene {
       const screen = this.add.sprite(0, -25, 'screen')
       screen.setScale(1.5)
       container.add(screen)
+
+      // === ACCESSOIRES DE BUREAU ===
+      // Lampe de bureau sur le côté gauche
+      const deskLamp = this.add.sprite(-35, -15, 'deskLamp')
+      deskLamp.setScale(1.3)
+      container.add(deskLamp)
+
+      // Clavier devant l'écran
+      const keyboard = this.add.sprite(0, 5, 'keyboard')
+      keyboard.setScale(1.4)
+      container.add(keyboard)
+
+      // Tasse de café sur le côté droit
+      const coffeeCup = this.add.sprite(40, -5, 'coffeeCup')
+      coffeeCup.setScale(1.5)
+      container.add(coffeeCup)
+
+      // Petite plante sur le bureau (côté droit)
+      const deskPlant = this.add.sprite(45, -20, 'smallPlant')
+      deskPlant.setScale(1.2)
+      container.add(deskPlant)
+
+      // Chaise de bureau derrière l'agent
+      const officeChair = this.add.sprite(0, 45, 'officeChair')
+      officeChair.setScale(1.6)
+      container.add(officeChair)
 
       // Agent assis devant
       const agentSprite = this.add.sprite(0, 20, 'agent')
