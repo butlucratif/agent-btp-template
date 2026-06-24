@@ -69,7 +69,7 @@ export function SystemStatsBar() {
           }}
         >
           {/* Premium glow effect on hover */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#fbbf24]/0 to-[#7c3aed]/0 group-hover:from-[#fbbf24]/10 group-hover:to-[#7c3aed]/10 transition-all duration-300 rounded-2xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#fbbf24]/0 to-[#3b82f6]/0 group-hover:from-[#fbbf24]/10 group-hover:to-[#3b82f6]/10 transition-all duration-300 rounded-2xl" />
 
           {/* Gold accent line */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#fbbf24] to-transparent opacity-50" />

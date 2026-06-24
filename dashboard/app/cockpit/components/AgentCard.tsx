@@ -58,7 +58,7 @@ export function AgentCard({ agent, index, onTrigger }: AgentCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Premium glow effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#fbbf24]/0 to-[#7c3aed]/0 group-hover:from-[#fbbf24]/5 group-hover:to-[#7c3aed]/5 transition-all duration-300 rounded-2xl" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#fbbf24]/0 to-[#3b82f6]/0 group-hover:from-[#fbbf24]/5 group-hover:to-[#3b82f6]/5 transition-all duration-300 rounded-2xl" />
 
       {/* Gold accent line */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#fbbf24] to-transparent opacity-30" />
@@ -66,7 +66,7 @@ export function AgentCard({ agent, index, onTrigger }: AgentCardProps) {
       {/* Header */}
       <div className="relative z-10 flex items-start justify-between mb-6">
         <div className="flex items-center gap-4">
-          <div className="text-3xl bg-gradient-to-br from-[#fbbf24]/20 to-[#7c3aed]/20 p-3 rounded-xl">
+          <div className="text-3xl bg-gradient-to-br from-[#fbbf24]/20 to-[#3b82f6]/20 p-3 rounded-xl">
             {agent.icon}
           </div>
           <div>
@@ -100,8 +100,8 @@ export function AgentCard({ agent, index, onTrigger }: AgentCardProps) {
           <span className="text-sm text-white font-mono tabular-nums">{formatTimeAgo(agent.lastRun)}</span>
         </div>
 
-        <div className="flex justify-between items-center p-3 rounded-lg bg-[#0f172a]/30 border border-[#7c3aed]/10">
-          <span className="text-xs text-[#a78bfa]/80 uppercase tracking-wide font-semibold">Prochaine exécution</span>
+        <div className="flex justify-between items-center p-3 rounded-lg bg-[#0f172a]/30 border border-[#3b82f6]/10">
+          <span className="text-xs text-[#60a5fa]/80 uppercase tracking-wide font-semibold">Prochaine exécution</span>
           <span className="text-sm text-white font-mono tabular-nums">{formatCountdown(agent.nextRun)}</span>
         </div>
 

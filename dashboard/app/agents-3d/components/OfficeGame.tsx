@@ -32,7 +32,7 @@ function InteractionMenu({ agent, onClose, onAction }: InteractionMenuProps) {
     { id: 'report', label: '📊 Demander un rapport', color: '#3b82f6' },
     { id: 'pause', label: '⏸️ Mettre en pause', color: '#eab308' },
     { id: 'boost', label: '⚡ Travailler plus', color: '#22c55e' },
-    { id: 'status', label: '💬 Voir le status', color: '#a78bfa' },
+    { id: 'status', label: '💬 Voir le status', color: '#60a5fa' },
   ]
 
   return (
@@ -103,12 +103,12 @@ function InteractionMenu({ agent, onClose, onAction }: InteractionMenuProps) {
 }
 
 const COLORS = {
-  background: 0x0a0118, // Violet très sombre Wall Street
+  background: 0x0a0118, // Fond sombre premium
   floor: 0x1e1b4b, // Parquet sombre
   wall: 0x1e293b, // Mur slate
   desk: 0x475569, // Bureau slate
-  screen: 0x7c3aed, // Écran violet premium
-  screenGlow: 0xa855f7, // Lueur violette
+  screen: 0x3b82f6, // Écran bleu premium
+  screenGlow: 0x60a5fa, // Lueur bleue
   gold: 0xfbbf24, // Or premium
   plant: 0x22c55e, // Vert plante
   window: 0x38bdf8, // Bleu ciel fenêtre

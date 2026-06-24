@@ -12,7 +12,7 @@ export default function CockpitPage() {
     <div className="min-h-screen bg-gradient-to-br from-[#0a0118] via-[#0f172a] to-[#1e1b4b] relative overflow-hidden">
       {/* Premium background effects */}
       <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#7c3aed] rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#3b82f6] rounded-full blur-[120px]" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#fbbf24] rounded-full blur-[120px]" />
       </div>
 
@@ -20,9 +20,9 @@ export default function CockpitPage() {
         {/* Premium Hero Header */}
         <div className="text-center space-y-4 mb-12">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-[#fbbf24] via-[#f59e0b] to-[#fbbf24] bg-clip-text text-transparent animate-shimmer">
-            Wall Street Command Center
+            Centre de Contrôle
           </h1>
-          <p className="text-[#a1a1aa] text-lg">Centre de contrôle premium pour vos agents IA</p>
+          <p className="text-[#a1a1aa] text-lg">Pilotage premium de vos agents IA</p>
         </div>
 
         {/* Premium Stats Bar */}
