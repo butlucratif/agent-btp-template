@@ -51,21 +51,21 @@ export function TriggerButton({ agentName, onTrigger }: TriggerButtonProps) {
       onClick={handleTrigger}
       disabled={loading}
       className={`
-        relative px-4 py-2 rounded-lg font-medium text-sm
-        transition-all duration-300
+        w-full px-4 py-2.5 rounded-lg font-medium text-sm
+        transition-all duration-200
         ${
           loading
-            ? 'bg-gray-700 text-gray-400 cursor-wait'
+            ? 'bg-[#18181b] text-[#52525b] cursor-wait border border-[rgba(255,255,255,0.06)]'
             : status === 'success'
-              ? 'bg-green-600 text-white'
+              ? 'bg-[#22c55e] text-white'
               : status === 'error'
-                ? 'bg-red-600 text-white'
-                : 'bg-orange-500/20 text-orange-500 hover:bg-orange-500 hover:text-white border border-orange-500/50'
+                ? 'bg-[#ef4444] text-white'
+                : 'bg-transparent text-[#f97316] border border-[#f97316] hover:bg-[#f97316] hover:text-white'
         }
       `}
     >
       {loading ? (
-        <span className="flex items-center gap-2">
+        <span className="flex items-center justify-center gap-2">
           <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
             <circle
               className="opacity-25"
@@ -85,14 +85,14 @@ export function TriggerButton({ agentName, onTrigger }: TriggerButtonProps) {
           Lancement...
         </span>
       ) : status === 'success' ? (
-        <span className="flex items-center gap-2">
+        <span className="flex items-center justify-center gap-2">
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
           Lancé !
         </span>
       ) : status === 'error' ? (
-        <span className="flex items-center gap-2">
+        <span className="flex items-center justify-center gap-2">
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
@@ -104,23 +104,7 @@ export function TriggerButton({ agentName, onTrigger }: TriggerButtonProps) {
           Erreur
         </span>
       ) : (
-        <span className="flex items-center gap-2">
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          Lancer
-        </span>
+        'Lancer'
       )}
     </button>
   )

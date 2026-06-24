@@ -3,29 +3,14 @@
 import { useAgentStatus } from '../hooks/useAgentStatus'
 import { useAgentLogs } from '../hooks/useAgentLogs'
 import { useEffect, useState } from 'react'
-import styles from '../cockpit.module.css'
-
-function formatUptime(): string {
-  const now = new Date()
-  const startOfDay = new Date()
-  startOfDay.setHours(0, 0, 0, 0)
-  const diff = now.getTime() - startOfDay.getTime()
-  const hours = Math.floor(diff / (1000 * 60 * 60))
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-  return `${hours}h ${minutes}min`
-}
 
 export function SystemStatsBar() {
   const { agents } = useAgentStatus()
   const { logs } = useAgentLogs(100)
-  const [uptime, setUptime] = useState(formatUptime())
+  const [mounted, setMounted] = useState(false)
 
-  // Update uptime every minute
   useEffect(() => {
-    const interval = setInterval(() => {
-      setUptime(formatUptime())
-    }, 60000)
-    return () => clearInterval(interval)
+    setMounted(true)
   }, [])
 
   const activeAgents = agents.filter((a) => a.isActive).length
@@ -48,129 +33,60 @@ export function SystemStatsBar() {
         })()
       : 'Aucune activité'
 
+  const stats = [
+    {
+      label: "Actions aujourd'hui",
+      value: totalActionsToday,
+      type: 'number' as const,
+    },
+    {
+      label: 'Agents actifs',
+      value: `${activeAgents}/6`,
+      type: 'text' as const,
+    },
+    {
+      label: 'Taux de succès',
+      value: `${successRate}%`,
+      type: 'text' as const,
+    },
+    {
+      label: 'Dernière activité',
+      value: lastActivity,
+      type: 'time' as const,
+    },
+  ]
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      {/* Total actions */}
-      <div
-        className={`
-          p-4 rounded-xl backdrop-blur-md
-          bg-gradient-to-br from-orange-500/10 to-orange-900/10
-          border border-orange-500/30
-          ${styles.fadeInUp}
-        `}
-        style={{ animationDelay: '0s' }}
-      >
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-orange-500/20">
-            <svg
-              className="w-6 h-6 text-orange-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              />
-            </svg>
-          </div>
-          <div>
-            <p className="text-sm text-gray-400">Actions aujourd'hui</p>
-            <p className="text-2xl font-bold text-orange-500">{totalActionsToday}</p>
-          </div>
-        </div>
-      </div>
+      {stats.map((stat, index) => (
+        <div
+          key={stat.label}
+          className="bg-[#111113] rounded-xl p-6 border border-[rgba(255,255,255,0.06)] relative overflow-hidden"
+          style={{
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? 'translateY(0)' : 'translateY(8px)',
+            transition: `opacity 0.3s ease ${index * 0.05}s, transform 0.3s ease ${index * 0.05}s`,
+          }}
+        >
+          {/* Subtle separator line on right (except last) */}
+          {index < stats.length - 1 && (
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-12 bg-[rgba(255,255,255,0.04)] hidden lg:block" />
+          )}
 
-      {/* Active agents */}
-      <div
-        className={`
-          p-4 rounded-xl backdrop-blur-md
-          bg-gradient-to-br from-green-500/10 to-green-900/10
-          border border-green-500/30
-          ${styles.fadeInUp}
-        `}
-        style={{ animationDelay: '0.1s' }}
-      >
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-green-500/20">
-            <div className={`w-6 h-6 flex items-center justify-center`}>
-              <div className={`w-3 h-3 rounded-full bg-green-500 ${styles.pulse}`} />
-            </div>
-          </div>
-          <div>
-            <p className="text-sm text-gray-400">Agents actifs</p>
-            <p className="text-2xl font-bold text-green-500">{activeAgents}/6</p>
-          </div>
+          <p className="text-xs text-[#52525b] uppercase tracking-wide mb-2 font-medium">{stat.label}</p>
+          <p
+            className={`font-semibold tabular-nums ${
+              stat.type === 'number'
+                ? 'text-3xl text-[#fafafa]'
+                : stat.type === 'time'
+                  ? 'text-lg text-[#a1a1aa] font-mono'
+                  : 'text-2xl text-[#fafafa]'
+            }`}
+          >
+            {stat.value}
+          </p>
         </div>
-      </div>
-
-      {/* Success rate */}
-      <div
-        className={`
-          p-4 rounded-xl backdrop-blur-md
-          bg-gradient-to-br from-cyan-500/10 to-cyan-900/10
-          border border-cyan-500/30
-          ${styles.fadeInUp}
-        `}
-        style={{ animationDelay: '0.2s' }}
-      >
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-cyan-500/20">
-            <svg
-              className="w-6 h-6 text-cyan-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-          <div>
-            <p className="text-sm text-gray-400">Taux de succès</p>
-            <p className="text-2xl font-bold text-cyan-500">{successRate}%</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Last activity */}
-      <div
-        className={`
-          p-4 rounded-xl backdrop-blur-md
-          bg-gradient-to-br from-purple-500/10 to-purple-900/10
-          border border-purple-500/30
-          ${styles.fadeInUp}
-        `}
-        style={{ animationDelay: '0.3s' }}
-      >
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-purple-500/20">
-            <svg
-              className="w-6 h-6 text-purple-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-          <div>
-            <p className="text-sm text-gray-400">Dernière activité</p>
-            <p className="text-lg font-bold text-purple-500">{lastActivity}</p>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   )
 }

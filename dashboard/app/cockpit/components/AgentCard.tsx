@@ -1,9 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { AgentStatus } from '../hooks/useAgentStatus'
-import { SparklineChart } from './SparklineChart'
 import { TriggerButton } from './TriggerButton'
-import styles from '../cockpit.module.css'
 
 interface AgentCardProps {
   agent: AgentStatus
@@ -40,96 +39,78 @@ function formatCountdown(date: Date | null): string {
 }
 
 export function AgentCard({ agent, index, onTrigger }: AgentCardProps) {
+  const [isHovered, setIsHovered] = useState(false)
   const isActive = agent.isActive
   const hasError = agent.status === 'error'
 
   return (
     <div
       className={`
-        relative overflow-hidden rounded-xl p-6
-        backdrop-blur-md
-        border transition-all duration-300
-        ${styles.fadeInUp}
-        ${
-          isActive
-            ? `${styles.glow} bg-gradient-to-br from-orange-500/10 to-orange-900/10 border-orange-500/50`
-            : hasError
-              ? 'bg-gradient-to-br from-red-500/5 to-red-900/5 border-red-500/30'
-              : 'bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700/50 hover:border-orange-500/30'
-        }
+        group relative bg-[#111113] rounded-xl p-6 border transition-all duration-200
+        ${isActive ? 'border-l-2 border-l-[#f97316] bg-[#18181b] border-[rgba(255,255,255,0.08)]' : 'border-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.12)]'}
       `}
       style={{
-        animationDelay: `${index * 0.1}s`,
+        opacity: 0,
+        animation: `fadeInUp 0.4s ease forwards ${index * 0.08}s`,
       }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Header */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="text-3xl">{agent.icon}</div>
+          <span className="text-2xl">{agent.icon}</span>
           <div>
-            <h3 className="text-lg font-semibold text-white">{agent.displayName}</h3>
-            <p className="text-sm text-gray-400">{agent.name}</p>
+            <h3 className="text-sm font-semibold text-[#fafafa]">{agent.displayName}</h3>
+            <p className="text-xs text-[#52525b] font-mono mt-0.5">{agent.name}</p>
           </div>
         </div>
 
-        {/* Pulse indicator */}
+        {/* Status indicator - pulse animation only when active */}
         <div className="relative">
           <div
-            className={`
-              w-3 h-3 rounded-full
-              ${isActive ? `bg-green-500 ${styles.pulseFast}` : hasError ? 'bg-red-500' : 'bg-gray-600'}
-            `}
+            className={`w-1.5 h-1.5 rounded-full ${
+              isActive
+                ? 'bg-[#22c55e]'
+                : hasError
+                  ? 'bg-[#ef4444]'
+                  : 'bg-[#52525b]'
+            }`}
+            style={{
+              animation: isActive ? 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' : 'none',
+            }}
           />
-          {isActive && (
-            <div
-              className="absolute inset-0 w-3 h-3 rounded-full bg-green-500/50"
-              style={{ animation: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite' }}
-            />
-          )}
         </div>
       </div>
 
       {/* Metrics */}
-      <div className="space-y-3 mb-4">
+      <div className="space-y-3 mb-5">
         <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-400">Dernière exécution</span>
-          <span className="text-sm text-white font-medium">{formatTimeAgo(agent.lastRun)}</span>
+          <span className="text-xs text-[#52525b]">Dernière exécution</span>
+          <span className="text-xs text-[#a1a1aa] font-mono tabular-nums">{formatTimeAgo(agent.lastRun)}</span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-400">Prochaine exécution</span>
-          <span className="text-sm text-cyan-400 font-medium">{formatCountdown(agent.nextRun)}</span>
+          <span className="text-xs text-[#52525b]">Prochaine exécution</span>
+          <span className="text-xs text-[#a1a1aa] font-mono tabular-nums">{formatCountdown(agent.nextRun)}</span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-400">Actions aujourd'hui</span>
-          <span className="text-sm text-orange-400 font-bold">{agent.actionsToday}</span>
+          <span className="text-xs text-[#52525b]">Actions aujourd'hui</span>
+          <span className="text-sm text-[#fafafa] font-mono font-semibold tabular-nums">{agent.actionsToday}</span>
         </div>
       </div>
 
-      {/* Last action */}
-      <div className="mb-4">
-        <p className="text-xs text-gray-500 mb-1">Dernière action</p>
-        <p className="text-sm text-gray-300 truncate">{agent.lastAction}</p>
+      {/* Trigger button - appears on hover */}
+      <div
+        className="transition-opacity duration-200"
+        style={{
+          opacity: isHovered ? 1 : 0,
+          pointerEvents: isHovered ? 'auto' : 'none',
+        }}
+      >
+        <TriggerButton agentName={agent.name} onTrigger={onTrigger} />
       </div>
-
-      {/* Sparkline */}
-      <div className="mb-4 flex justify-center">
-        <SparklineChart data={agent.activityData} width={200} height={40} color="#f97316" />
-      </div>
-
-      {/* Trigger button */}
-      <TriggerButton agentName={agent.name} onTrigger={onTrigger} />
-
-      {/* Scan line effect when active */}
-      {isActive && (
-        <div
-          className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50"
-          style={{
-            animation: 'scan 2s linear infinite',
-          }}
-        />
-      )}
     </div>
   )
 }

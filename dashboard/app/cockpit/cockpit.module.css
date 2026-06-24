@@ -1,142 +1,35 @@
-/* Pulse animation for active agent indicators */
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.7;
-  }
-}
+/* Minimal animations for Dark Premium SaaS aesthetic */
 
-/* Fast pulse for running agents */
-@keyframes pulseFast {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.3);
-    opacity: 0.6;
-  }
-}
-
-/* Glow effect for active cards */
-@keyframes glow {
-  0%, 100% {
-    box-shadow:
-      0 0 20px rgba(249, 115, 22, 0.3),
-      0 0 40px rgba(249, 115, 22, 0.1),
-      inset 0 0 20px rgba(249, 115, 22, 0.05);
-  }
-  50% {
-    box-shadow:
-      0 0 30px rgba(249, 115, 22, 0.5),
-      0 0 60px rgba(249, 115, 22, 0.2),
-      inset 0 0 30px rgba(249, 115, 22, 0.1);
-  }
-}
-
-/* Grid line animation */
-@keyframes gridMove {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 50px 50px;
-  }
-}
-
-/* Floating particles */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) translateX(0);
-  }
-  33% {
-    transform: translateY(-20px) translateX(10px);
-  }
-  66% {
-    transform: translateY(-10px) translateX(-10px);
-  }
-}
-
-/* Scan line effect */
-@keyframes scan {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100vh);
-  }
-}
-
-/* Fade in up animation for cards */
 @keyframes fadeInUp {
-  0% {
+  from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(8px);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Slide in from top for activity feed entries */
-@keyframes slideInFromTop {
-  0% {
+@keyframes slideIn {
+  from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-8px);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Rotating border gradient */
-@keyframes rotateBorder {
-  0% {
-    background-position: 0% 50%;
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
   50% {
-    background-position: 100% 50%;
+    opacity: 0.5;
+    transform: scale(1.5);
   }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Utility classes */
-.pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-.pulseFast {
-  animation: pulseFast 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-.glow {
-  animation: glow 3s ease-in-out infinite;
-}
-
-.float {
-  animation: float 8s ease-in-out infinite;
-}
-
-.gridMove {
-  animation: gridMove 20s linear infinite;
-}
-
-.scan {
-  animation: scan 4s linear infinite;
-}
-
-.fadeInUp {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-.slideIn {
-  animation: slideInFromTop 0.4s ease-out forwards;
 }
