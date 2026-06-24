@@ -136,10 +136,42 @@ export default function Agents3DPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#08080a] flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#3b82f6] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-[#a1a1aa] text-sm">Chargement du bureau pixel art...</p>
+      <div className="min-h-screen bg-gradient-to-br from-[#0a0118] via-[#0f172a] to-[#1e1b4b] relative overflow-hidden flex items-center justify-center">
+        {/* Background glow effects */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#3b82f6] rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#fbbf24] rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+        </div>
+
+        <div className="relative z-10 text-center">
+          {/* Premium loading spinner */}
+          <div className="relative mx-auto mb-8">
+            {/* Outer ring */}
+            <div className="w-24 h-24 border-4 border-[#1e293b]/30 rounded-full absolute inset-0"></div>
+            {/* Spinning gradient ring */}
+            <div className="w-24 h-24 border-4 border-transparent border-t-[#3b82f6] border-r-[#fbbf24] rounded-full animate-spin"></div>
+            {/* Inner pulsing dot */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-3 h-3 bg-gradient-to-r from-[#3b82f6] to-[#fbbf24] rounded-full animate-pulse shadow-lg shadow-[#3b82f6]/50"></div>
+            </div>
+          </div>
+
+          {/* Loading text */}
+          <div className="space-y-3">
+            <p className="text-xl font-bold bg-gradient-to-r from-[#fbbf24] via-[#f59e0b] to-[#fbbf24] bg-clip-text text-transparent animate-shimmer">
+              Chargement du bureau...
+            </p>
+            <p className="text-sm text-[#a1a1aa]/70 font-medium tracking-wide">
+              Préparation de l'environnement pixel art premium
+            </p>
+          </div>
+
+          {/* Animated dots */}
+          <div className="flex items-center justify-center gap-2 mt-6">
+            <div className="w-2 h-2 bg-[#3b82f6] rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+            <div className="w-2 h-2 bg-[#3b82f6] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+            <div className="w-2 h-2 bg-[#3b82f6] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+          </div>
         </div>
       </div>
     )
@@ -147,31 +179,49 @@ export default function Agents3DPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0118] via-[#0f172a] to-[#1e1b4b] relative overflow-hidden">
-      {/* HUD Top Bar - Compact */}
-      <div className="absolute top-0 left-0 right-0 z-20 bg-gradient-to-b from-[#0a0118]/95 to-transparent backdrop-blur-sm">
-        <div className="flex items-center justify-between px-8 py-4">
-          <div className="flex items-center gap-6">
-            <h1 className="text-2xl font-bold text-white flex items-center gap-3">
-              <span className="text-3xl">💼</span>
-              <span className="bg-gradient-to-r from-[#fbbf24] via-[#f59e0b] to-[#fbbf24] bg-clip-text text-transparent">
+      {/* HUD Top Bar - Premium Glassmorphism */}
+      <div className="absolute top-0 left-0 right-0 z-20 bg-gradient-to-b from-[#0a0118]/90 via-[#0a0118]/70 to-transparent backdrop-blur-xl border-b border-white/5">
+        <div className="flex items-center justify-between px-8 py-5">
+          <div className="flex items-center gap-8">
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3 relative">
+              <span className="text-4xl drop-shadow-lg">💼</span>
+              <span className="bg-gradient-to-r from-[#fbbf24] via-[#f59e0b] to-[#fbbf24] bg-clip-text text-transparent drop-shadow-2xl animate-shimmer">
                 Bureau des Agents
               </span>
+              {/* Subtle glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#fbbf24]/20 via-[#f59e0b]/20 to-[#fbbf24]/20 blur-xl -z-10"></div>
             </h1>
-            <div className="flex items-center gap-4 ml-6">
-              <div className="bg-[#111113]/60 backdrop-blur-md rounded-lg px-4 py-2 border border-[#fbbf24]/20">
-                <span className="text-xs text-[#fbbf24] font-semibold">{agents.filter((a) => a.isActive).length} Actifs</span>
+            <div className="flex items-center gap-3 ml-4">
+              {/* Active agents badge */}
+              <div className="group relative bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 backdrop-blur-lg rounded-xl px-5 py-2.5 border border-[#fbbf24]/30 shadow-lg shadow-[#fbbf24]/10 hover:shadow-[#fbbf24]/20 transition-all duration-300 hover:scale-105">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#fbbf24]/0 to-[#fbbf24]/0 group-hover:from-[#fbbf24]/5 group-hover:to-[#fbbf24]/10 rounded-xl transition-all duration-300"></div>
+                <div className="relative flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-[#fbbf24] animate-pulse shadow-lg shadow-[#fbbf24]/50"></div>
+                  <span className="text-sm text-[#fbbf24] font-bold tracking-wide">{agents.filter((a) => a.isActive).length}</span>
+                  <span className="text-xs text-[#fbbf24]/70 uppercase font-semibold tracking-wider">Actifs</span>
+                </div>
               </div>
-              <div className="bg-[#111113]/60 backdrop-blur-md rounded-lg px-4 py-2 border border-[#3b82f6]/20">
-                <span className="text-xs text-[#60a5fa]">{agents.reduce((sum, a) => sum + a.actionsToday, 0)} Actions</span>
+
+              {/* Actions badge */}
+              <div className="group relative bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 backdrop-blur-lg rounded-xl px-5 py-2.5 border border-[#3b82f6]/30 shadow-lg shadow-[#3b82f6]/10 hover:shadow-[#3b82f6]/20 transition-all duration-300 hover:scale-105">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#3b82f6]/0 to-[#3b82f6]/0 group-hover:from-[#3b82f6]/5 group-hover:to-[#3b82f6]/10 rounded-xl transition-all duration-300"></div>
+                <div className="relative flex items-center gap-2">
+                  <span className="text-sm text-[#60a5fa] font-bold tracking-wide">{agents.reduce((sum, a) => sum + a.actionsToday, 0)}</span>
+                  <span className="text-xs text-[#60a5fa]/70 uppercase font-semibold tracking-wider">Actions</span>
+                </div>
               </div>
             </div>
           </div>
 
           <Link
             href="/cockpit"
-            className="px-5 py-2.5 bg-gradient-to-r from-[#3b82f6] to-[#2563eb] hover:from-[#2563eb] hover:to-[#1d4ed8] text-white rounded-lg font-semibold transition-all duration-200 shadow-lg shadow-[#3b82f6]/30 hover:shadow-[#3b82f6]/50 text-sm"
+            className="group relative px-6 py-3 bg-gradient-to-r from-[#3b82f6] to-[#2563eb] hover:from-[#2563eb] hover:to-[#1d4ed8] text-white rounded-xl font-bold transition-all duration-300 shadow-xl shadow-[#3b82f6]/40 hover:shadow-2xl hover:shadow-[#3b82f6]/60 text-sm overflow-hidden hover:scale-105"
           >
-            ← Cockpit
+            <div className="absolute inset-0 bg-gradient-to-r from-white/0 to-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+            <span className="relative flex items-center gap-2">
+              <span>←</span>
+              <span className="tracking-wide">Cockpit</span>
+            </span>
           </Link>
         </div>
       </div>
@@ -181,18 +231,36 @@ export default function Agents3DPage() {
         <OfficeGame agents={agents} />
       </div>
 
-      {/* HUD Bottom - Instructions */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="bg-[#111113]/90 backdrop-blur-md rounded-xl px-8 py-3 border border-[#fbbf24]/30 shadow-2xl shadow-[#fbbf24]/10">
-          <p className="text-[#fbbf24] text-sm text-center font-medium flex items-center gap-6">
-            <span className="flex items-center gap-2">
-              <kbd className="px-2 py-1 bg-[#1e293b] rounded text-xs border border-[#334155]">WASD</kbd>
-              <span className="text-[#a1a1aa]">Déplacer</span>
+      {/* HUD Bottom - Premium Instructions */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="group relative bg-gradient-to-br from-[#1e293b]/90 to-[#0f172a]/90 backdrop-blur-xl rounded-2xl px-10 py-4 border border-[#fbbf24]/40 shadow-2xl shadow-[#fbbf24]/20 hover:shadow-[#fbbf24]/30 transition-all duration-300">
+          {/* Glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#fbbf24]/0 via-[#fbbf24]/5 to-[#fbbf24]/0 rounded-2xl"></div>
+
+          <p className="relative text-sm text-center font-semibold flex items-center gap-8">
+            <span className="flex items-center gap-3">
+              <kbd className="px-3 py-2 bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-lg text-xs font-bold border border-[#fbbf24]/30 shadow-lg text-[#fbbf24] tracking-wider min-w-[3rem] text-center">
+                WASD
+              </kbd>
+              <span className="text-[#e5e7eb]/90 font-medium tracking-wide">Déplacer</span>
             </span>
-            <span className="w-px h-4 bg-[#334155]"></span>
-            <span className="flex items-center gap-2">
-              <kbd className="px-2 py-1 bg-[#1e293b] rounded text-xs border border-[#334155]">E</kbd>
-              <span className="text-[#a1a1aa]">Interagir avec agent</span>
+
+            <span className="w-px h-6 bg-gradient-to-b from-transparent via-[#fbbf24]/30 to-transparent"></span>
+
+            <span className="flex items-center gap-3">
+              <kbd className="px-3 py-2 bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-lg text-xs font-bold border border-[#3b82f6]/30 shadow-lg text-[#60a5fa] tracking-wider min-w-[3rem] text-center">
+                E
+              </kbd>
+              <span className="text-[#e5e7eb]/90 font-medium tracking-wide">Interagir avec agent</span>
+            </span>
+
+            <span className="w-px h-6 bg-gradient-to-b from-transparent via-[#fbbf24]/30 to-transparent"></span>
+
+            <span className="flex items-center gap-3">
+              <div className="px-3 py-2 bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-lg text-xs font-bold border border-[#10b981]/30 shadow-lg text-[#10b981] tracking-wider">
+                CLICK
+              </div>
+              <span className="text-[#e5e7eb]/90 font-medium tracking-wide">Objets interactifs</span>
             </span>
           </p>
         </div>
