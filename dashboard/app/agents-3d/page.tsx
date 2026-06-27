@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 
 interface AgentStatus {
   name: string
@@ -180,6 +181,126 @@ export default function Agents3DPage() {
   const devisEnAttente = devis.filter((d) => d.statut === 'en_attente')
   const chantiersEnCours = chantiers.filter((c) => c.statut === 'en_cours')
 
+  // Prepare chart data - Évolution des devis (30 derniers jours)
+  const getDevisEvolutionData = () => {
+    const today = new Date()
+    const thirtyDaysAgo = new Date(today)
+    thirtyDaysAgo.setDate(today.getDate() - 30)
+
+    const days: { date: string; count: number }[] = []
+    for (let i = 0; i < 30; i++) {
+      const date = new Date(thirtyDaysAgo)
+      date.setDate(thirtyDaysAgo.getDate() + i)
+      days.push({
+        date: date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }),
+        count: 0,
+      })
+    }
+
+    devis.forEach((d) => {
+      const devisDate = new Date(d.date_envoi)
+      if (devisDate >= thirtyDaysAgo && devisDate <= today) {
+        const dayIndex = Math.floor((devisDate.getTime() - thirtyDaysAgo.getTime()) / (1000 * 60 * 60 * 24))
+        if (dayIndex >= 0 && dayIndex < 30) {
+          days[dayIndex].count++
+        }
+      }
+    })
+
+    return days
+  }
+
+  // CA prévisionnel par semaine (4 prochaines semaines)
+  const getCAPrevisionnel = () => {
+    const today = new Date()
+    const weeks: { week: string; ca: number }[] = []
+
+    for (let i = 0; i < 4; i++) {
+      const weekStart = new Date(today)
+      weekStart.setDate(today.getDate() + i * 7)
+      const weekEnd = new Date(weekStart)
+      weekEnd.setDate(weekStart.getDate() + 6)
+
+      let weekCA = 0
+      chantiers.forEach((c) => {
+        const startDate = new Date(c.date_debut)
+        if (startDate >= weekStart && startDate <= weekEnd) {
+          weekCA += Number(c.montant_devis)
+        }
+      })
+
+      weeks.push({
+        week: `Sem ${i + 1}`,
+        ca: Math.round(weekCA),
+      })
+    }
+
+    return weeks
+  }
+
+  // Activité des agents (7 derniers jours)
+  const getAgentActivityData = () => {
+    const today = new Date()
+    const sevenDaysAgo = new Date(today)
+    sevenDaysAgo.setDate(today.getDate() - 7)
+
+    const days: { date: string; actions: number }[] = []
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(sevenDaysAgo)
+      date.setDate(sevenDaysAgo.getDate() + i)
+      days.push({
+        date: date.toLocaleDateString('fr-FR', { weekday: 'short' }),
+        actions: 0,
+      })
+    }
+
+    logs.forEach((log) => {
+      const logDate = new Date(log.created_at)
+      if (logDate >= sevenDaysAgo && logDate <= today) {
+        const dayIndex = Math.floor((logDate.getTime() - sevenDaysAgo.getTime()) / (1000 * 60 * 60 * 24))
+        if (dayIndex >= 0 && dayIndex < 7) {
+          days[dayIndex].actions++
+        }
+      }
+    })
+
+    return days
+  }
+
+  // Taux de conversion devis (par mois)
+  const getTauxConversionData = () => {
+    const months: { mois: string; envoyes: number; acceptes: number; taux: number }[] = []
+    const today = new Date()
+
+    for (let i = 5; i >= 0; i--) {
+      const monthDate = new Date(today.getFullYear(), today.getMonth() - i, 1)
+      const monthEnd = new Date(today.getFullYear(), today.getMonth() - i + 1, 0)
+
+      const devisMois = devis.filter((d) => {
+        const devisDate = new Date(d.date_envoi)
+        return devisDate >= monthDate && devisDate <= monthEnd
+      })
+
+      const envoyes = devisMois.length
+      const acceptes = devisMois.filter((d) => d.statut === 'accepte').length
+      const taux = envoyes > 0 ? Math.round((acceptes / envoyes) * 100) : 0
+
+      months.push({
+        mois: monthDate.toLocaleDateString('fr-FR', { month: 'short' }),
+        envoyes,
+        acceptes,
+        taux,
+      })
+    }
+
+    return months
+  }
+
+  const devisEvolutionData = getDevisEvolutionData()
+  const caPrevisionnel = getCAPrevisionnel()
+  const agentActivityData = getAgentActivityData()
+  const tauxConversionData = getTauxConversionData()
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -269,7 +390,7 @@ export default function Agents3DPage() {
 
       {/* Main Content */}
       <main className="flex-1 ml-64">
-        {/* Header - Simplified */}
+        {/* Header */}
         <div className="h-20 bg-white border-b border-gray-200 flex items-center px-8">
           <h1 className="text-2xl font-bold text-gray-900">
             {activeTab === 'dashboard' && 'Tableau de bord'}
@@ -336,7 +457,115 @@ export default function Agents3DPage() {
                 </div>
               </div>
 
-              {/* Charts Row */}
+              {/* Charts Section */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                {/* Évolution des Devis */}
+                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Évolution des Devis</h3>
+                  <p className="text-sm text-gray-500 mb-6">Nombre de devis envoyés par jour (30 derniers jours)</p>
+                  <ResponsiveContainer width="100%" height={280}>
+                    <LineChart data={devisEvolutionData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                      <XAxis dataKey="date" stroke="#9ca3af" style={{ fontSize: '11px' }} />
+                      <YAxis stroke="#9ca3af" style={{ fontSize: '11px' }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#ffffff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                          fontSize: '13px',
+                        }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="count"
+                        stroke="#3B82F6"
+                        strokeWidth={2.5}
+                        dot={{ fill: '#3B82F6', r: 3 }}
+                        activeDot={{ r: 5 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* CA Prévisionnel */}
+                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">CA Prévisionnel</h3>
+                  <p className="text-sm text-gray-500 mb-6">Revenus prévus par semaine (4 prochaines semaines)</p>
+                  <ResponsiveContainer width="100%" height={280}>
+                    <BarChart data={caPrevisionnel}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                      <XAxis dataKey="week" stroke="#9ca3af" style={{ fontSize: '11px' }} />
+                      <YAxis stroke="#9ca3af" style={{ fontSize: '11px' }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#ffffff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                          fontSize: '13px',
+                        }}
+                        formatter={(value) => `${Number(value).toLocaleString('fr-FR')}€`}
+                      />
+                      <Bar dataKey="ca" fill="#22C55E" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Activité des Agents */}
+                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Activité des Agents</h3>
+                  <p className="text-sm text-gray-500 mb-6">Actions effectuées par jour (7 derniers jours)</p>
+                  <ResponsiveContainer width="100%" height={280}>
+                    <LineChart data={agentActivityData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                      <XAxis dataKey="date" stroke="#9ca3af" style={{ fontSize: '11px' }} />
+                      <YAxis stroke="#9ca3af" style={{ fontSize: '11px' }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#ffffff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                          fontSize: '13px',
+                        }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="actions"
+                        stroke="#8B5CF6"
+                        strokeWidth={2.5}
+                        dot={{ fill: '#8B5CF6', r: 3 }}
+                        activeDot={{ r: 5 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Taux de Conversion */}
+                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Taux de Conversion</h3>
+                  <p className="text-sm text-gray-500 mb-6">Devis envoyés vs acceptés (6 derniers mois)</p>
+                  <ResponsiveContainer width="100%" height={280}>
+                    <BarChart data={tauxConversionData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                      <XAxis dataKey="mois" stroke="#9ca3af" style={{ fontSize: '11px' }} />
+                      <YAxis stroke="#9ca3af" style={{ fontSize: '11px' }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#ffffff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                          fontSize: '13px',
+                        }}
+                      />
+                      <Legend />
+                      <Bar dataKey="envoyes" fill="#94A3B8" name="Envoyés" radius={[8, 8, 0, 0]} />
+                      <Bar dataKey="acceptes" fill="#3B82F6" name="Acceptés" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Quick Overview Row */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {/* Devis En Attente */}
                 <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
