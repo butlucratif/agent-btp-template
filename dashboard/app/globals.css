@@ -1,11 +1,11 @@
-/* Ultra Clean Dashboard Design - Space Grotesk & Inter */
+/* Ultra Modern Dashboard Design - Space Grotesk & Inter */
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Ultra Clean Color System */
+/* Ultra Modern Color System */
 :root {
   /* Colors */
   --color-primary:         #3B82F6;
@@ -13,13 +13,13 @@
   --color-danger:          #EF4444;
 
   /* Neutrals - Ultra subtle */
-  --color-background:      #F7F7F7;
+  --color-background:      #FAFAFA;
   --color-surface:         #FFFFFF;
-  --color-surface-hover:   #FAFAFA;
+  --color-surface-hover:   #F5F5F5;
 
-  /* Borders - Very subtle */
-  --color-border:          #E5E5E5;
-  --color-border-light:    #F0F0F0;
+  /* Borders - Quasi invisibles */
+  --color-border:          #F0F0F0;
+  --color-border-light:    #F5F5F5;
 
   /* Text */
   --color-text-primary:    #171717;
@@ -30,11 +30,10 @@
   --font-display:          'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-primary:          'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Shadows - Ultra subtle */
-  --shadow-xs:             0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  --shadow-sm:             0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md:             0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  --shadow-lg:             0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  /* Shadows - Quasi invisibles */
+  --shadow-xs:             0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  --shadow-sm:             0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-md:             0 2px 4px 0 rgba(0, 0, 0, 0.04);
 
   /* Transitions */
   --transition-fast:       120ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -88,17 +87,17 @@
   *:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
   }
 }
 
 @layer components {
-  /* Ultra Clean Card */
+  /* Modern Card - Très subtil */
   .card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: 1.25rem;
-    padding: 1.5rem;
+    border-radius: 1rem;
+    padding: 2rem;
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-base);
   }
@@ -107,17 +106,17 @@
     box-shadow: var(--shadow-md);
   }
 
-  /* Stat Card - Comme dans l'image */
+  /* Stat Card - Comme dans la référence */
   .stat-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: 1.25rem;
-    padding: 2rem;
+    border-radius: 1.5rem;
+    padding: 3rem;
     box-shadow: var(--shadow-sm);
   }
 
   .stat-number {
-    font-size: 3rem;
+    font-size: 3.75rem;
     font-weight: 800;
     font-family: var(--font-display);
     color: var(--color-text-primary);
@@ -125,23 +124,7 @@
     letter-spacing: -0.03em;
   }
 
-  .stat-label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    margin-top: 0.5rem;
-  }
-
-  .stat-change {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-success);
-  }
-
-  /* Button - Style référence */
+  /* Button - Modern */
   .btn {
     display: inline-flex;
     align-items: center;
@@ -157,7 +140,7 @@
   }
 
   .btn-primary {
-    background: var(--color-text-primary);
+    background: var(--color-primary);
     color: white;
   }
 
@@ -176,7 +159,7 @@
     background: var(--color-surface-hover);
   }
 
-  /* Badge - Comme dans l'image */
+  /* Badge - Moderne */
   .badge {
     display: inline-flex;
     align-items: center;
@@ -220,7 +203,7 @@
     color: var(--color-text-tertiary);
   }
 
-  /* Avatar - Comme dans l'image */
+  /* Avatar */
   .avatar {
     width: 2.5rem;
     height: 2.5rem;
@@ -229,13 +212,6 @@
     background: var(--color-surface);
     border: 2px solid var(--color-surface);
     box-shadow: var(--shadow-sm);
-  }
-
-  /* Divider */
-  .divider {
-    height: 1px;
-    background: var(--color-border);
-    width: 100%;
   }
 
   /* Loading Spinner */
@@ -250,40 +226,6 @@
 
   @keyframes spin {
     to { transform: rotate(360deg); }
-  }
-
-  /* Sidebar - Style référence */
-  .sidebar {
-    background: var(--color-surface);
-    border-right: 1px solid var(--color-border);
-    height: 100vh;
-    width: 240px;
-    position: fixed;
-    left: 0;
-    top: 0;
-  }
-
-  .sidebar-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    color: var(--color-text-secondary);
-    font-size: 0.875rem;
-    font-weight: 500;
-    border-radius: 0.75rem;
-    transition: all var(--transition-fast);
-    cursor: pointer;
-  }
-
-  .sidebar-item:hover {
-    background: var(--color-surface-hover);
-    color: var(--color-text-primary);
-  }
-
-  .sidebar-item.active {
-    background: var(--color-text-primary);
-    color: white;
   }
 }
 
