@@ -10,8 +10,8 @@ const OfficeGame = dynamic(() => import('./components/OfficeGame').then(mod => (
   loading: () => (
     <div className="w-full h-full flex items-center justify-center">
       <div className="text-center">
-        <div className="w-16 h-16 border-4 border-[#3b82f6] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-[#a1a1aa] text-sm">Chargement du jeu pixel art...</p>
+        <div className="spinner mx-auto mb-4"></div>
+        <p className="text-gray-500 text-sm font-medium">Chargement du jeu pixel art...</p>
       </div>
     </div>
   ),
@@ -28,47 +28,22 @@ interface AgentStatus {
   actionsToday: number
 }
 
-// Couleurs cartoon vibrantes pour chaque agent
 const AGENT_COLORS: Record<string, string> = {
-  'relance-devis': '#f97316', // Orange vif
-  'daily-briefing': '#fbbf24', // Jaune doré
-  'urgent-alert': '#ef4444', // Rouge vif
-  'calcul-ca': '#10b981', // Vert émeraude
-  'avis-google': '#3b82f6', // Bleu vif
-  'rentabilite-chantier': '#8b5cf6', // Violet
+  'relance-devis': '#3B82F6',
+  'daily-briefing': '#22C55E',
+  'urgent-alert': '#EF4444',
+  'calcul-ca': '#8B5CF6',
+  'avis-google': '#F59E0B',
+  'rentabilite-chantier': '#06B6D4',
 }
 
 const AGENTS_INFO = [
-  {
-    name: 'relance-devis',
-    displayName: 'Relance Devis',
-    emoji: '📧',
-  },
-  {
-    name: 'daily-briefing',
-    displayName: 'Daily Briefing',
-    emoji: '☀️',
-  },
-  {
-    name: 'urgent-alert',
-    displayName: 'Urgent Alert',
-    emoji: '🚨',
-  },
-  {
-    name: 'calcul-ca',
-    displayName: 'CA Hebdo',
-    emoji: '💰',
-  },
-  {
-    name: 'avis-google',
-    displayName: 'Avis Google',
-    emoji: '⭐',
-  },
-  {
-    name: 'rentabilite-chantier',
-    displayName: 'Rentabilité',
-    emoji: '📊',
-  },
+  { name: 'relance-devis', displayName: 'Relance Devis', emoji: '📧' },
+  { name: 'daily-briefing', displayName: 'Daily Briefing', emoji: '☀️' },
+  { name: 'urgent-alert', displayName: 'Urgent Alert', emoji: '🚨' },
+  { name: 'calcul-ca', displayName: 'CA Hebdo', emoji: '💰' },
+  { name: 'avis-google', displayName: 'Avis Google', emoji: '⭐' },
+  { name: 'rentabilite-chantier', displayName: 'Rentabilité', emoji: '📊' },
 ]
 
 export default function Agents3DPage() {
@@ -77,22 +52,13 @@ export default function Agents3DPage() {
 
   useEffect(() => {
     fetchAgentStatuses()
-
-    // Subscribe to real-time updates
     const channel = supabase
       .channel('agent-logs-3d')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'agent_logs' },
-        () => {
-          fetchAgentStatuses()
-        }
-      )
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'agent_logs' }, () => {
+        fetchAgentStatuses()
+      })
       .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
+    return () => { supabase.removeChannel(channel) }
   }, [])
 
   async function fetchAgentStatuses() {
@@ -107,21 +73,18 @@ export default function Agents3DPage() {
         const agentLogs = logs?.filter((log) => log.agent_name === info.name) || []
         const lastLog = agentLogs[0]
         const isActive = lastLog
-          ? new Date().getTime() - new Date(lastLog.created_at).getTime() < 5 * 60 * 1000 // Actif si dernière action < 5 min
+          ? new Date().getTime() - new Date(lastLog.created_at).getTime() < 5 * 60 * 1000
           : false
-
         const todayStart = new Date()
         todayStart.setHours(0, 0, 0, 0)
-        const actionsToday = agentLogs.filter(
-          (log) => new Date(log.created_at) >= todayStart
-        ).length
+        const actionsToday = agentLogs.filter((log) => new Date(log.created_at) >= todayStart).length
 
         return {
           ...info,
-          color: AGENT_COLORS[info.name] || '#6b7280',
+          color: AGENT_COLORS[info.name] || '#737373',
           isActive,
           lastRun: lastLog ? new Date(lastLog.created_at) : null,
-          nextRun: null, // À calculer selon le schedule si nécessaire
+          nextRun: null,
           actionsToday,
         }
       })
@@ -136,136 +99,203 @@ export default function Agents3DPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0a0118] via-[#0f172a] to-[#1e1b4b] relative overflow-hidden flex items-center justify-center">
-        {/* Background glow effects */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#3b82f6] rounded-full blur-[120px] animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#fbbf24] rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
-        </div>
-
-        <div className="relative z-10 text-center">
-          {/* Premium loading spinner */}
-          <div className="relative mx-auto mb-8">
-            {/* Outer ring */}
-            <div className="w-24 h-24 border-4 border-[#1e293b]/30 rounded-full absolute inset-0"></div>
-            {/* Spinning gradient ring */}
-            <div className="w-24 h-24 border-4 border-transparent border-t-[#3b82f6] border-r-[#fbbf24] rounded-full animate-spin"></div>
-            {/* Inner pulsing dot */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-3 h-3 bg-gradient-to-r from-[#3b82f6] to-[#fbbf24] rounded-full animate-pulse shadow-lg shadow-[#3b82f6]/50"></div>
-            </div>
-          </div>
-
-          {/* Loading text */}
-          <div className="space-y-3">
-            <p className="text-xl font-bold bg-gradient-to-r from-[#fbbf24] via-[#f59e0b] to-[#fbbf24] bg-clip-text text-transparent animate-shimmer">
-              Chargement du bureau...
-            </p>
-            <p className="text-sm text-[#a1a1aa]/70 font-medium tracking-wide">
-              Préparation de l'environnement pixel art premium
-            </p>
-          </div>
-
-          {/* Animated dots */}
-          <div className="flex items-center justify-center gap-2 mt-6">
-            <div className="w-2 h-2 bg-[#3b82f6] rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-            <div className="w-2 h-2 bg-[#3b82f6] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-            <div className="w-2 h-2 bg-[#3b82f6] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-          </div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="spinner mx-auto mb-6"></div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Chargement du bureau</h3>
+          <p className="text-sm text-gray-500">Préparation de l'environnement</p>
         </div>
       </div>
     )
   }
 
+  const activeAgents = agents.filter((a) => a.isActive).length
+  const totalActions = agents.reduce((sum, a) => sum + a.actionsToday, 0)
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0118] via-[#0f172a] to-[#1e1b4b] relative overflow-hidden">
-      {/* HUD Top Bar - Premium Glassmorphism */}
-      <div className="absolute top-0 left-0 right-0 z-20 bg-gradient-to-b from-[#0a0118]/90 via-[#0a0118]/70 to-transparent backdrop-blur-xl border-b border-white/5">
-        <div className="flex items-center justify-between px-8 py-5">
-          <div className="flex items-center gap-8">
-            <h1 className="text-3xl font-bold text-white flex items-center gap-3 relative">
-              <span className="text-4xl drop-shadow-lg">💼</span>
-              <span className="bg-gradient-to-r from-[#fbbf24] via-[#f59e0b] to-[#fbbf24] bg-clip-text text-transparent drop-shadow-2xl animate-shimmer">
-                Bureau des Agents
-              </span>
-              {/* Subtle glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#fbbf24]/20 via-[#f59e0b]/20 to-[#fbbf24]/20 blur-xl -z-10"></div>
-            </h1>
-            <div className="flex items-center gap-3 ml-4">
-              {/* Active agents badge */}
-              <div className="group relative bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 backdrop-blur-lg rounded-xl px-5 py-2.5 border border-[#fbbf24]/30 shadow-lg shadow-[#fbbf24]/10 hover:shadow-[#fbbf24]/20 transition-all duration-300 hover:scale-105">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#fbbf24]/0 to-[#fbbf24]/0 group-hover:from-[#fbbf24]/5 group-hover:to-[#fbbf24]/10 rounded-xl transition-all duration-300"></div>
-                <div className="relative flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-[#fbbf24] animate-pulse shadow-lg shadow-[#fbbf24]/50"></div>
-                  <span className="text-sm text-[#fbbf24] font-bold tracking-wide">{agents.filter((a) => a.isActive).length}</span>
-                  <span className="text-xs text-[#fbbf24]/70 uppercase font-semibold tracking-wider">Actifs</span>
-                </div>
+    <div className="min-h-screen bg-background">
+      {/* Sidebar - Style référence */}
+      <div className="sidebar p-6">
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-8">
+            <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center text-white text-sm font-bold">
+              AI
+            </div>
+            <span className="font-bold text-gray-900">Agents BTP</span>
+          </div>
+
+          <nav className="space-y-1">
+            <div className="sidebar-item active">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              <span>Dashboard</span>
+            </div>
+
+            <div className="sidebar-item">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              <span>Agents</span>
+            </div>
+
+            <Link href="/cockpit" className="sidebar-item">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <span>Cockpit</span>
+            </Link>
+          </nav>
+        </div>
+      </div>
+
+      {/* Main Content - Style référence */}
+      <div className="ml-60 p-8">
+        {/* Header - Style référence */}
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Bureau des Agents</h1>
+
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search anything..."
+                className="input w-80 pl-10"
+              />
+              <svg className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+
+            <button className="btn btn-primary">
+              Create
+            </button>
+
+            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Overview Section */}
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">Overview</h2>
+
+          <div className="grid grid-cols-2 gap-6 mb-8">
+            {/* Agents Actifs Card - Style référence */}
+            <div className="stat-card">
+              <div className="flex items-center gap-2 mb-4">
+                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span className="text-sm font-semibold text-gray-900">Agents</span>
               </div>
 
-              {/* Actions badge */}
-              <div className="group relative bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 backdrop-blur-lg rounded-xl px-5 py-2.5 border border-[#3b82f6]/30 shadow-lg shadow-[#3b82f6]/10 hover:shadow-[#3b82f6]/20 transition-all duration-300 hover:scale-105">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#3b82f6]/0 to-[#3b82f6]/0 group-hover:from-[#3b82f6]/5 group-hover:to-[#3b82f6]/10 rounded-xl transition-all duration-300"></div>
-                <div className="relative flex items-center gap-2">
-                  <span className="text-sm text-[#60a5fa] font-bold tracking-wide">{agents.reduce((sum, a) => sum + a.actionsToday, 0)}</span>
-                  <span className="text-xs text-[#60a5fa]/70 uppercase font-semibold tracking-wider">Actions</span>
-                </div>
+              <div className="stat-number">{activeAgents}</div>
+
+              <div className="flex items-center gap-2 mt-2">
+                <span className="badge badge-success">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                  </svg>
+                  +{Math.round((activeAgents / 6) * 100)}%
+                </span>
+                <span className="text-xs text-gray-500">vs last month</span>
               </div>
+
+              <p className="text-sm text-gray-500 mt-4">{activeAgents} actifs aujourd'hui</p>
+            </div>
+
+            {/* Actions Card - Style référence */}
+            <div className="stat-card">
+              <div className="flex items-center gap-2 mb-4">
+                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+                <span className="text-sm font-semibold text-gray-900">Actions</span>
+              </div>
+
+              <div className="stat-number">{totalActions}</div>
+
+              <div className="flex items-center gap-2 mt-2">
+                <span className="badge badge-success">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                  </svg>
+                  +36.5%
+                </span>
+                <span className="text-xs text-gray-500">vs last month</span>
+              </div>
+
+              <p className="text-sm text-gray-500 mt-4">Toutes actions confondues</p>
             </div>
           </div>
 
-          <Link
-            href="/cockpit"
-            className="group relative px-6 py-3 bg-gradient-to-r from-[#3b82f6] to-[#2563eb] hover:from-[#2563eb] hover:to-[#1d4ed8] text-white rounded-xl font-bold transition-all duration-300 shadow-xl shadow-[#3b82f6]/40 hover:shadow-2xl hover:shadow-[#3b82f6]/60 text-sm overflow-hidden hover:scale-105"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-white/0 to-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-            <span className="relative flex items-center gap-2">
-              <span>←</span>
-              <span className="tracking-wide">Cockpit</span>
-            </span>
-          </Link>
+          {/* Agents List Card */}
+          <div className="card">
+            <div className="mb-4">
+              <p className="text-sm font-semibold text-gray-900 mb-1">{agents.length} agents aujourd'hui</p>
+              <p className="text-xs text-gray-500">Cliquez sur un agent pour interagir</p>
+            </div>
+
+            <div className="flex items-center gap-4 overflow-x-auto pb-2">
+              {agents.map((agent) => (
+                <div key={agent.name} className="flex flex-col items-center gap-2 min-w-[80px]">
+                  <div
+                    className="avatar w-12 h-12 text-2xl flex items-center justify-center"
+                    style={{ background: `${agent.color}15` }}
+                  >
+                    {agent.emoji}
+                  </div>
+                  <span className="text-xs font-medium text-gray-700 text-center">
+                    {agent.displayName.split(' ')[0]}
+                  </span>
+                  {agent.isActive && (
+                    <div className="w-2 h-2 rounded-full bg-success"></div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Scène Pixel Art - Full Screen */}
-      <div className="absolute inset-0">
-        <OfficeGame agents={agents} />
-      </div>
+        {/* Pixel Art Game Section */}
+        <div className="card p-0 overflow-hidden" style={{ height: '500px' }}>
+          <OfficeGame agents={agents} />
+        </div>
 
-      {/* HUD Bottom - Premium Instructions */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="group relative bg-gradient-to-br from-[#1e293b]/90 to-[#0f172a]/90 backdrop-blur-xl rounded-2xl px-10 py-4 border border-[#fbbf24]/40 shadow-2xl shadow-[#fbbf24]/20 hover:shadow-[#fbbf24]/30 transition-all duration-300">
-          {/* Glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#fbbf24]/0 via-[#fbbf24]/5 to-[#fbbf24]/0 rounded-2xl"></div>
-
-          <p className="relative text-sm text-center font-semibold flex items-center gap-8">
-            <span className="flex items-center gap-3">
-              <kbd className="px-3 py-2 bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-lg text-xs font-bold border border-[#fbbf24]/30 shadow-lg text-[#fbbf24] tracking-wider min-w-[3rem] text-center">
+        {/* Instructions */}
+        <div className="card mt-6">
+          <div className="flex items-center justify-center gap-8 text-sm">
+            <div className="flex items-center gap-2">
+              <kbd className="px-3 py-1.5 bg-gray-50 rounded-lg text-xs font-semibold border border-gray-200 text-gray-700">
                 WASD
               </kbd>
-              <span className="text-[#e5e7eb]/90 font-medium tracking-wide">Déplacer</span>
-            </span>
+              <span className="text-gray-600">Déplacer</span>
+            </div>
 
-            <span className="w-px h-6 bg-gradient-to-b from-transparent via-[#fbbf24]/30 to-transparent"></span>
+            <div className="w-px h-4 bg-gray-200"></div>
 
-            <span className="flex items-center gap-3">
-              <kbd className="px-3 py-2 bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-lg text-xs font-bold border border-[#3b82f6]/30 shadow-lg text-[#60a5fa] tracking-wider min-w-[3rem] text-center">
+            <div className="flex items-center gap-2">
+              <kbd className="px-3 py-1.5 bg-gray-50 rounded-lg text-xs font-semibold border border-gray-200 text-gray-700">
                 E
               </kbd>
-              <span className="text-[#e5e7eb]/90 font-medium tracking-wide">Interagir avec agent</span>
-            </span>
+              <span className="text-gray-600">Interagir</span>
+            </div>
 
-            <span className="w-px h-6 bg-gradient-to-b from-transparent via-[#fbbf24]/30 to-transparent"></span>
+            <div className="w-px h-4 bg-gray-200"></div>
 
-            <span className="flex items-center gap-3">
-              <div className="px-3 py-2 bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-lg text-xs font-bold border border-[#10b981]/30 shadow-lg text-[#10b981] tracking-wider">
+            <div className="flex items-center gap-2">
+              <kbd className="px-3 py-1.5 bg-gray-50 rounded-lg text-xs font-semibold border border-gray-200 text-gray-700">
                 CLICK
-              </div>
-              <span className="text-[#e5e7eb]/90 font-medium tracking-wide">Objets interactifs</span>
-            </span>
-          </p>
+              </kbd>
+              <span className="text-gray-600">Objets</span>
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
   )
 }

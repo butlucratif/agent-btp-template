@@ -9,73 +9,66 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Construction BTP Color System
+        // Ultra Clean Design System
         primary: {
-          DEFAULT: '#F97316',
-          dark: '#EA580C',
-          light: '#FDBA74',
-          50: '#FFF7ED',
-          100: '#FFEDD5',
-          200: '#FED7AA',
-          300: '#FDBA74',
-          400: '#FB923C',
-          500: '#F97316',
-          600: '#EA580C',
-          700: '#C2410C',
-          800: '#9A3412',
-          900: '#7C2D12',
+          DEFAULT: '#3B82F6',
+          dark: '#2563EB',
+          light: '#60A5FA',
         },
-        secondary: {
-          DEFAULT: '#1C1917',
-          50: '#FAFAF9',
-          100: '#F5F5F4',
-          200: '#E7E5E4',
-          300: '#D6D3D1',
-          400: '#A8A29E',
-          500: '#78716C',
-          600: '#57534E',
-          700: '#44403C',
-          800: '#292524',
-          900: '#1C1917',
+        success: {
+          DEFAULT: '#22C55E',
+          light: '#86EFAC',
+          dark: '#16A34A',
         },
-        // BTP Status Colors
-        status: {
-          attente: '#F97316',   // Orange - En attente
-          accepte: '#10B981',   // Green - Accepté
-          refuse: '#EF4444',    // Red - Refusé
-          prevu: '#3B82F6',     // Blue - Prévu
-          encours: '#EAB308',   // Yellow - En cours
-          termine: '#6B7280',   // Dark gray - Terminé
+        danger: {
+          DEFAULT: '#EF4444',
+          light: '#FCA5A5',
+          dark: '#DC2626',
         },
-        // Surface & Background
-        background: '#FAFAF9',
+        // Neutral Gray Scale - Ultra subtle
+        gray: {
+          50: '#FAFAFA',
+          100: '#F5F5F5',
+          200: '#E5E5E5',
+          300: '#D4D4D4',
+          400: '#A3A3A3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
+        },
+        // Background & Surface
+        background: '#F7F7F7',
         surface: '#FFFFFF',
-        'surface-hover': '#FFF7ED',
-        border: '#E7E5E0',
-        'accent-light': '#FFF7ED',
-        // Legacy support
-        foreground: "var(--foreground)",
+        'surface-hover': '#FAFAFA',
+        border: '#E5E5E5',
+        'border-light': '#F0F0F0',
       },
       fontFamily: {
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        primary: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        sans: ['Space Grotesk', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        primary: ['Space Grotesk', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        display: ['Space Grotesk', 'sans-serif'],
       },
       fontSize: {
-        'stat': 'clamp(2rem, 4vw, 2.5rem)',
+        'stat': 'clamp(2rem, 4vw, 3rem)',
+        'hero': 'clamp(2.5rem, 5vw, 4rem)',
       },
       borderRadius: {
-        'sm': '0.375rem',
-        'md': '0.5rem',
-        'lg': '0.75rem',
-        'xl': '1rem',
-        '2xl': '1.25rem',
+        'sm': '0.5rem',
+        'md': '0.75rem',
+        'lg': '1rem',
+        'xl': '1.5rem',
+        '2xl': '2rem',
+        '3xl': '2.5rem',
       },
       boxShadow: {
-        'xs': '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
-        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.05)',
-        'md': '0 4px 6px -1px rgba(0, 0, 0, 0.08)',
-        'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.08)',
-        'glow-orange': '0 0 8px rgba(249, 115, 22, 0.4)',
+        'xs': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        'sm': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        'xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       },
       spacing: {
         '18': '4.5rem',
@@ -83,9 +76,32 @@ const config: Config = {
       },
       transitionDuration: {
         '250': '250ms',
+        '350': '350ms',
+        '400': '400ms',
       },
       transitionTimingFunction: {
         'ease-smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
+        'ease-bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+        'ease-fluid': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.3s ease-out',
+        'slide-up': 'slideUp 0.4s ease-out',
+        'scale-in': 'scaleIn 0.3s ease-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        scaleIn: {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
       },
     },
   },
