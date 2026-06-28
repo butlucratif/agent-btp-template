@@ -12,16 +12,19 @@ interface HeroCardProps {
 const statusThemes = {
   actif: {
     badgeBg: '#F0FBF4',
+    badgeBorder: '#D5F0DF',
     badgeText: '#157347',
     dot: '#10B981',
   },
   pause: {
     badgeBg: '#F4F4F2',
+    badgeBorder: '#E4E3E0',
     badgeText: '#6F6B61',
     dot: '#A8A49B',
   },
   error: {
     badgeBg: '#FEF1F1',
+    badgeBorder: '#F2D6D6',
     badgeText: '#C2353A',
     dot: '#E5484D',
   },
@@ -44,13 +47,11 @@ export default function HeroCard({ amount, statusPills }: HeroCardProps) {
           <div
             style={{
               fontSize: '14px',
-              fontWeight: 600,
-              color: '#6F6B61',
-              letterSpacing: '0.02em',
-              marginBottom: '12px',
+              color: '#9A968D',
+              fontWeight: 500,
             }}
           >
-            CETTE SEMAINE
+            Cette semaine, ils vous ont rapporté
           </div>
           <div
             style={{
@@ -58,20 +59,21 @@ export default function HeroCard({ amount, statusPills }: HeroCardProps) {
               fontWeight: 800,
               color: '#23211D',
               letterSpacing: '-0.03em',
-              lineHeight: '1.1',
-              marginBottom: '8px',
+              lineHeight: 1.05,
+              marginTop: '6px',
             }}
           >
             {amount}
           </div>
           <div
             style={{
-              fontSize: '15px',
-              color: '#9A968D',
-              lineHeight: '1.4',
+              fontSize: '14.5px',
+              color: '#56524A',
+              marginTop: '8px',
+              lineHeight: 1.5,
             }}
           >
-            Ils vous ont rapporté
+            de devis relancés et de chantiers signés — pendant que vous étiez sur le terrain.
           </div>
         </div>
 
@@ -82,12 +84,13 @@ export default function HeroCard({ amount, statusPills }: HeroCardProps) {
             return (
               <div
                 key={pill.status}
-                className="inline-flex items-center gap-2.5 font-semibold"
+                className="inline-flex items-center gap-2.5"
                 style={{
                   fontSize: '13px',
-                  padding: '10px 16px 10px 14px',
-                  borderRadius: '20px',
+                  padding: '13px 16px',
+                  borderRadius: '14px',
                   background: theme.badgeBg,
+                  border: `1px solid ${theme.badgeBorder}`,
                   color: theme.badgeText,
                 }}
               >
@@ -106,7 +109,7 @@ export default function HeroCard({ amount, statusPills }: HeroCardProps) {
                   />
                 </span>
                 <span style={{ fontWeight: 700, fontSize: '15px' }}>{pill.count}</span>
-                <span>{pill.label}</span>
+                <span style={{ fontWeight: 500 }}>{pill.label}</span>
               </div>
             )
           })}

@@ -3,11 +3,27 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+// SVG Icons
+const icons = {
+  accueil: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/><path d="M9.5 21v-6h5v6"/>',
+  salaries: '<rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 4v4M9 2h6"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/>',
+  devis: '<path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/><path d="M9 13h6M9 17h4"/>',
+  chantiers: '<path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/>',
+  bureau: '<path d="m12 3 9 5v8l-9 5-9-5V8l9-5Z"/><path d="m3 8 9 5 9-5M12 13v8"/>',
+}
+
 const navigation = [
-  { name: 'Tableau de bord', href: '/', icon: '📊' },
-  { name: 'Agents', href: '/agents', icon: '🤖' },
-  { name: 'Devis', href: '/devis', icon: '📝' },
-  { name: 'Chantiers', href: '/chantiers', icon: '🏗️' },
+  { section: 'Pilotage', items: [
+    { name: 'Accueil', href: '/', icon: icons.accueil },
+    { name: 'Mes salariés', href: '/agents', icon: icons.salaries, hasAlert: true },
+  ]},
+  { section: 'Mon entreprise', items: [
+    { name: 'Devis', href: '/devis', icon: icons.devis },
+    { name: 'Chantiers', href: '/chantiers', icon: icons.chantiers },
+  ]},
+  { section: 'En plus', items: [
+    { name: 'Le bureau des agents', href: '/bureau', icon: icons.bureau },
+  ]},
 ]
 
 export default function Sidebar() {
@@ -25,108 +41,167 @@ export default function Sidebar() {
       {/* Logo / Brand */}
       <div
         style={{
-          padding: '32px 24px',
-          borderBottom: '1px solid #ECEBE7',
+          padding: '24px 22px 20px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '11px',
         }}
       >
         <div
           style={{
-            fontSize: '19px',
+            width: '34px',
+            height: '34px',
+            borderRadius: '9px',
+            background: '#23211D',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fff',
             fontWeight: 800,
-            color: '#23211D',
-            letterSpacing: '-0.01em',
+            fontSize: '15px',
           }}
         >
-          BâtiPilot
+          B
         </div>
-        <div
-          style={{
-            fontSize: '12px',
-            color: '#9A968D',
-            marginTop: '4px',
-          }}
-        >
-          Agents IA
+        <div>
+          <div
+            style={{
+              fontWeight: 700,
+              fontSize: '14.5px',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            BâtiPilot
+          </div>
+          <div
+            style={{
+              fontSize: '11px',
+              color: '#9A968D',
+              fontWeight: 500,
+            }}
+          >
+            Vos salariés virtuels
+          </div>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav style={{ padding: '24px 16px', flex: 1 }}>
-        <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-          {navigation.map((item) => {
-            const isActive = pathname === item.href
-            return (
-              <li key={item.name} style={{ marginBottom: '6px' }}>
+      <nav
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '3px',
+          padding: '6px 12px',
+          flex: 1,
+        }}
+      >
+        {navigation.map((section) => (
+          <div key={section.section}>
+            <div
+              style={{
+                fontSize: '10.5px',
+                fontWeight: 600,
+                letterSpacing: '0.07em',
+                color: '#B4B0A6',
+                textTransform: 'uppercase',
+                padding: '14px 12px 5px',
+              }}
+            >
+              {section.section}
+            </div>
+            {section.items.map((item) => {
+              const isActive = pathname === item.href
+              return (
                 <Link
+                  key={item.name}
                   href={item.href}
                   className="no-underline block transition-all duration-200"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '12px',
-                    padding: '11px 14px',
-                    borderRadius: '12px',
-                    fontSize: '14.5px',
+                    gap: '11px',
+                    padding: '10px 12px',
+                    borderRadius: '11px',
+                    fontSize: '14px',
                     fontWeight: isActive ? 600 : 500,
-                    color: isActive ? '#157347' : '#6F6B61',
-                    background: isActive ? '#F0FBF4' : 'transparent',
+                    color: isActive ? '#23211D' : '#6F6B61',
+                    background: isActive ? '#F4F4F2' : 'transparent',
                   }}
                 >
-                  <span style={{ fontSize: '18px' }}>{item.icon}</span>
+                  <span
+                    style={{
+                      width: '18px',
+                      height: '18px',
+                      display: 'inline-flex',
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${item.icon}</svg>`,
+                    }}
+                  />
                   <span>{item.name}</span>
+                  {item.hasAlert && (
+                    <span
+                      style={{
+                        marginLeft: 'auto',
+                        width: '7px',
+                        height: '7px',
+                        borderRadius: '50%',
+                        background: '#E5484D',
+                      }}
+                    />
+                  )}
                 </Link>
-              </li>
-            )
-          })}
-        </ul>
+              )
+            })}
+          </div>
+        ))}
       </nav>
 
       {/* Bottom Section */}
       <div
         style={{
-          padding: '24px',
-          borderTop: '1px solid #ECEBE7',
+          marginTop: 'auto',
+          padding: '16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '11px',
         }}
       >
         <div
           style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            background: '#23211D',
+            color: '#fff',
             display: 'flex',
             alignItems: 'center',
-            gap: '12px',
+            justifyContent: 'center',
+            fontSize: '12px',
+            fontWeight: 700,
           }}
         >
+          ML
+        </div>
+        <div style={{ minWidth: 0 }}>
           <div
             style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: '#F8F8F7',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '18px',
+              fontSize: '12.5px',
+              fontWeight: 600,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
           >
-            👨‍💼
+            Maçonnerie Léon
           </div>
-          <div>
-            <div
-              style={{
-                fontSize: '14px',
-                fontWeight: 600,
-                color: '#23211D',
-              }}
-            >
-              Léon
-            </div>
-            <div
-              style={{
-                fontSize: '12px',
-                color: '#9A968D',
-              }}
-            >
-              Gérant
-            </div>
+          <div
+            style={{
+              fontSize: '11px',
+              color: '#9A968D',
+            }}
+          >
+            Patron
           </div>
         </div>
       </div>

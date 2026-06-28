@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { supabase, Devis, Chantier } from '@/lib/supabase'
 import HeroCard from '@/components/HeroCard'
 import AgentCard from '@/components/AgentCard'
@@ -176,21 +177,46 @@ export default function Dashboard() {
 
       <main className="flex-1" style={{ marginLeft: '236px' }}>
         <div className="w-full" style={{ maxWidth: '1000px', margin: '0 auto', padding: '48px 40px 64px' }}>
+          {/* Date */}
+          <div
+            style={{
+              fontSize: '13px',
+              color: '#9A968D',
+              fontWeight: 500,
+              marginBottom: '8px',
+            }}
+          >
+            {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          </div>
+
           {/* Hero Title */}
           <h1
             style={{
+              margin: '8px 0 0',
               fontSize: '30px',
               fontWeight: 700,
               color: '#23211D',
-              letterSpacing: '-0.01em',
-              marginBottom: '28px',
+              letterSpacing: '-0.025em',
             }}
           >
             Bonjour Léon 👋
           </h1>
 
+          {/* Subtitle */}
+          <p
+            style={{
+              margin: '10px 0 0',
+              fontSize: '17px',
+              lineHeight: 1.5,
+              color: '#56524A',
+              maxWidth: '560px',
+            }}
+          >
+            Vos salariés virtuels ont travaillé pour vous. Voici ce qu'ils ont fait — en clair.
+          </p>
+
           {/* Hero Card */}
-          <div style={{ marginBottom: '42px' }}>
+          <div style={{ marginTop: '32px', marginBottom: '42px' }}>
             <HeroCard
               amount={`${(totalCAWeek / 1000).toFixed(0)} 000 €`}
               statusPills={[
@@ -199,6 +225,38 @@ export default function Dashboard() {
                 { label: 'à regarder', count: agentStatuses.error, status: 'error' },
               ]}
             />
+          </div>
+
+          {/* Section Title */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '20px',
+            }}
+          >
+            <h2
+              style={{
+                fontSize: '20px',
+                fontWeight: 700,
+                color: '#23211D',
+                letterSpacing: '-0.015em',
+              }}
+            >
+              Vos 6 salariés
+            </h2>
+            <Link
+              href="/agents"
+              style={{
+                fontSize: '14px',
+                color: '#157347',
+                fontWeight: 600,
+                textDecoration: 'none',
+              }}
+            >
+              Tout voir →
+            </Link>
           </div>
 
           {/* Agent Cards Grid */}
