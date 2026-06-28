@@ -5,11 +5,11 @@ import Sidebar from '@/components/Sidebar'
 // Données complètes des devis extraites du HTML
 const devisData = [
   {
-    initials: 'VD',
-    client: 'Villa Dubois',
+    initials: 'ML',
+    client: 'M. et Mme Leclerc',
     date: 'Envoyé le 18 juin',
     relances: '📧 2×',
-    montant: '34 500 €',
+    montant: '18 500 €',
     statut: 'En attente',
     statutStyle: {
       bg: '#FCF3E6',
@@ -17,11 +17,11 @@ const devisData = [
     },
   },
   {
-    initials: 'RL',
-    client: 'Restaurant Le Phare',
+    initials: 'EB',
+    client: 'Entreprise Bâti-Rénov',
     date: 'Envoyé le 21 juin',
     relances: '📧 1×',
-    montant: '12 800 €',
+    montant: '12 300 €',
     statut: 'En attente',
     statutStyle: {
       bg: '#FCF3E6',
@@ -29,23 +29,11 @@ const devisData = [
     },
   },
   {
-    initials: 'SM',
-    client: 'SCI Montparnasse',
-    date: 'Envoyé le 23 juin',
-    relances: '📧 1×',
-    montant: '58 200 €',
-    statut: 'En attente',
-    statutStyle: {
-      bg: '#FCF3E6',
-      color: '#B45309',
-    },
-  },
-  {
-    initials: 'CR',
-    client: 'Cabinet Rivière',
+    initials: 'SL',
+    client: 'SCI La Fontaine',
     date: 'Envoyé le 24 juin',
-    relances: null,
-    montant: '9 400 €',
+    relances: '📧 1×',
+    montant: '24 800 €',
     statut: 'En attente',
     statutStyle: {
       bg: '#FCF3E6',
@@ -53,11 +41,11 @@ const devisData = [
     },
   },
   {
-    initials: 'GM',
-    client: 'Garage Mécano Plus',
+    initials: 'PD',
+    client: 'Pharmacie Durand',
     date: 'Envoyé le 25 juin',
     relances: null,
-    montant: '21 100 €',
+    montant: '8 900 €',
     statut: 'En attente',
     statutStyle: {
       bg: '#FCF3E6',
@@ -65,11 +53,23 @@ const devisData = [
     },
   },
   {
-    initials: 'ML',
-    client: 'Maison Lefèvre',
+    initials: 'FM',
+    client: 'Famille Martin',
+    date: 'Envoyé le 26 juin',
+    relances: null,
+    montant: '15 200 €',
+    statut: 'En attente',
+    statutStyle: {
+      bg: '#FCF3E6',
+      color: '#B45309',
+    },
+  },
+  {
+    initials: 'VB',
+    client: 'Villa Beaumont',
     date: 'Envoyé le 14 juin',
     relances: null,
-    montant: '28 000 €',
+    montant: '22 400 €',
     statut: 'Accepté',
     statutStyle: {
       bg: '#F0FBF4',
@@ -77,11 +77,11 @@ const devisData = [
     },
   },
   {
-    initials: 'BP',
-    client: 'Boulangerie Pain Co',
+    initials: 'CB',
+    client: 'Café Bistrot Central',
     date: 'Envoyé le 12 juin',
     relances: null,
-    montant: '7 600 €',
+    montant: '6 800 €',
     statut: 'Accepté',
     statutStyle: {
       bg: '#F0FBF4',
@@ -89,11 +89,11 @@ const devisData = [
     },
   },
   {
-    initials: 'HL',
-    client: 'Hangar Logistique Sud',
+    initials: 'BC',
+    client: 'Bureau Comptable',
     date: 'Envoyé le 20 juin',
     relances: null,
-    montant: '64 000 €',
+    montant: '19 700 €',
     statut: 'Envoyé',
     statutStyle: {
       bg: '#EEF1FB',
@@ -101,11 +101,11 @@ const devisData = [
     },
   },
   {
-    initials: 'CL',
-    client: 'Copropriété Les Tilleuls',
-    date: 'Envoyé le 8 juin',
+    initials: 'CP',
+    client: 'Copro. Les Peupliers',
+    date: 'Envoyé le 10 juin',
     relances: null,
-    montant: '19 500 €',
+    montant: '11 200 €',
     statut: 'Refusé',
     statutStyle: {
       bg: '#F4F4F2',
@@ -173,7 +173,7 @@ export default function DevisPage() {
                   color: '#B45309',
                 }}
               >
-                14
+                5
               </div>
               <div
                 style={{
@@ -203,7 +203,7 @@ export default function DevisPage() {
                   color: '#23211D',
                 }}
               >
-                182 000 €
+                79 700 €
               </div>
               <div
                 style={{
@@ -233,7 +233,7 @@ export default function DevisPage() {
                   color: '#157347',
                 }}
               >
-                16
+                8
               </div>
               <div
                 style={{
@@ -263,7 +263,7 @@ export default function DevisPage() {
                   color: '#4655B0',
                 }}
               >
-                11
+                4
               </div>
               <div
                 style={{

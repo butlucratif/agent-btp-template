@@ -5,43 +5,43 @@ import Sidebar from '@/components/Sidebar'
 // Données complètes des chantiers extraites du HTML
 const chantiersData = [
   {
-    nom: 'Extension Pavillon Nord',
-    montant: '86 000 €',
-    heures: '124 h pointées',
-    avancement: 78,
-    rentabilite: '+34 %',
+    nom: 'Extension Pavillon Particulier',
+    montant: '38 000 €',
+    heures: '82 h pointées',
+    avancement: 65,
+    rentabilite: '+26 %',
     barColor: '#10B981', // green
   },
   {
-    nom: 'Rénovation Loft Bastille',
-    montant: '52 400 €',
-    heures: '88 h pointées',
-    avancement: 61,
-    rentabilite: '+28 %',
-    barColor: '#10B981', // green
-  },
-  {
-    nom: 'Toiture Résidence Acacias',
-    montant: '41 900 €',
-    heures: '52 h pointées',
-    avancement: 45,
-    rentabilite: '+22 %',
+    nom: 'Rénovation Cuisine Restaurant',
+    montant: '24 500 €',
+    heures: '54 h pointées',
+    avancement: 48,
+    rentabilite: '+23 %',
     barColor: '#E0A93B', // orange
   },
   {
-    nom: 'Terrasse Villa Méridien',
-    montant: '23 700 €',
-    heures: '30 h pointées',
-    avancement: 30,
-    rentabilite: '+19 %',
+    nom: 'Toiture Maison Individuelle',
+    montant: '18 900 €',
+    heures: '36 h pointées',
+    avancement: 35,
+    rentabilite: '+21 %',
     barColor: '#E0A93B', // orange
   },
   {
-    nom: 'Local commercial Gare',
-    montant: '67 200 €',
-    heures: '14 h pointées',
-    avancement: 12,
-    rentabilite: '+12 %',
+    nom: 'Terrasse Jardin Particulier',
+    montant: '12 400 €',
+    heures: '22 h pointées',
+    avancement: 28,
+    rentabilite: '+24 %',
+    barColor: '#E0A93B', // orange
+  },
+  {
+    nom: 'Reprise Façade Boutique',
+    montant: '28 700 €',
+    heures: '18 h pointées',
+    avancement: 15,
+    rentabilite: '+26 %',
     barColor: '#7C86D6', // blue
   },
 ]
@@ -105,7 +105,7 @@ export default function ChantiersPage() {
                   color: '#23211D',
                 }}
               >
-                9
+                5
               </div>
               <div
                 style={{
@@ -135,7 +135,7 @@ export default function ChantiersPage() {
                   color: '#157347',
                 }}
               >
-                31 %
+                24 %
               </div>
               <div
                 style={{
@@ -165,7 +165,7 @@ export default function ChantiersPage() {
                   color: '#23211D',
                 }}
               >
-                271 000 €
+                122 500 €
               </div>
               <div
                 style={{
