@@ -10,6 +10,7 @@ const icons = {
   devis: '<path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/><path d="M9 13h6M9 17h4"/>',
   chantiers: '<path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/>',
   bureau: '<path d="m12 3 9 5v8l-9 5-9-5V8l9-5Z"/><path d="m3 8 9 5 9-5M12 13v8"/>',
+  import: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
 }
 
 const navigation = [
@@ -23,6 +24,7 @@ const navigation = [
   ]},
   { section: 'En plus', items: [
     { name: 'Le bureau des agents', href: '/bureau', icon: icons.bureau },
+    { name: 'Import de données', href: '/import', icon: icons.import },
   ]},
 ]
 
