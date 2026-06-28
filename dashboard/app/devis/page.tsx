@@ -1,453 +1,424 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { supabase, Devis } from '@/lib/supabase'
 import Sidebar from '@/components/Sidebar'
 
+// Données complètes des devis extraites du HTML
+const devisData = [
+  {
+    initials: 'VD',
+    client: 'Villa Dubois',
+    date: 'Envoyé le 18 juin',
+    relances: '📧 2×',
+    montant: '34 500 €',
+    statut: 'En attente',
+    statutStyle: {
+      bg: '#FCF3E6',
+      color: '#B45309',
+    },
+  },
+  {
+    initials: 'RL',
+    client: 'Restaurant Le Phare',
+    date: 'Envoyé le 21 juin',
+    relances: '📧 1×',
+    montant: '12 800 €',
+    statut: 'En attente',
+    statutStyle: {
+      bg: '#FCF3E6',
+      color: '#B45309',
+    },
+  },
+  {
+    initials: 'SM',
+    client: 'SCI Montparnasse',
+    date: 'Envoyé le 23 juin',
+    relances: '📧 1×',
+    montant: '58 200 €',
+    statut: 'En attente',
+    statutStyle: {
+      bg: '#FCF3E6',
+      color: '#B45309',
+    },
+  },
+  {
+    initials: 'CR',
+    client: 'Cabinet Rivière',
+    date: 'Envoyé le 24 juin',
+    relances: null,
+    montant: '9 400 €',
+    statut: 'En attente',
+    statutStyle: {
+      bg: '#FCF3E6',
+      color: '#B45309',
+    },
+  },
+  {
+    initials: 'GM',
+    client: 'Garage Mécano Plus',
+    date: 'Envoyé le 25 juin',
+    relances: null,
+    montant: '21 100 €',
+    statut: 'En attente',
+    statutStyle: {
+      bg: '#FCF3E6',
+      color: '#B45309',
+    },
+  },
+  {
+    initials: 'ML',
+    client: 'Maison Lefèvre',
+    date: 'Envoyé le 14 juin',
+    relances: null,
+    montant: '28 000 €',
+    statut: 'Accepté',
+    statutStyle: {
+      bg: '#F0FBF4',
+      color: '#157347',
+    },
+  },
+  {
+    initials: 'BP',
+    client: 'Boulangerie Pain Co',
+    date: 'Envoyé le 12 juin',
+    relances: null,
+    montant: '7 600 €',
+    statut: 'Accepté',
+    statutStyle: {
+      bg: '#F0FBF4',
+      color: '#157347',
+    },
+  },
+  {
+    initials: 'HL',
+    client: 'Hangar Logistique Sud',
+    date: 'Envoyé le 20 juin',
+    relances: null,
+    montant: '64 000 €',
+    statut: 'Envoyé',
+    statutStyle: {
+      bg: '#EEF1FB',
+      color: '#4655B0',
+    },
+  },
+  {
+    initials: 'CL',
+    client: 'Copropriété Les Tilleuls',
+    date: 'Envoyé le 8 juin',
+    relances: null,
+    montant: '19 500 €',
+    statut: 'Refusé',
+    statutStyle: {
+      bg: '#F4F4F2',
+      color: '#8A867C',
+    },
+  },
+]
+
 export default function DevisPage() {
-  const [devis, setDevis] = useState<Devis[]>([])
-  const [filteredDevis, setFilteredDevis] = useState<Devis[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [filterStatus, setFilterStatus] = useState<string>('all')
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
-
-  useEffect(() => {
-    fetchDevis()
-
-    // Subscribe to real-time changes
-    const channel = supabase
-      .channel('devis-changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'devis' }, () => {
-        fetchDevis()
-      })
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (filterStatus === 'all') {
-      setFilteredDevis(devis)
-    } else {
-      setFilteredDevis(devis.filter((d) => d.statut === filterStatus))
-    }
-  }, [devis, filterStatus])
-
-  // Auto-hide toast after 3 seconds
-  useEffect(() => {
-    if (toast) {
-      const timer = setTimeout(() => setToast(null), 3000)
-      return () => clearTimeout(timer)
-    }
-  }, [toast])
-
-  async function fetchDevis() {
-    try {
-      setLoading(true)
-
-      const { data, error: fetchError } = await supabase
-        .from('devis')
-        .select('*')
-        .order('date_envoi', { ascending: false })
-
-      if (fetchError) throw fetchError
-
-      setDevis(data || [])
-      setError(null)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Une erreur est survenue')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  async function updateDevisStatus(id: string, newStatus: string, clientNom: string) {
-    const statusLabels = {
-      accepte: 'accepté',
-      refuse: 'refusé',
-      en_attente: 'remis en attente',
-    }
-
-    const confirmMessage =
-      newStatus === 'accepte'
-        ? `Êtes-vous sûr de vouloir accepter le devis de ${clientNom} ?`
-        : newStatus === 'refuse'
-        ? `Êtes-vous sûr de vouloir refuser le devis de ${clientNom} ?`
-        : `Remettre le devis de ${clientNom} en attente ?`
-
-    if (!window.confirm(confirmMessage)) {
-      return
-    }
-
-    try {
-      const { error: updateError } = await supabase
-        .from('devis')
-        .update({ statut: newStatus })
-        .eq('id', id)
-
-      if (updateError) throw updateError
-
-      // Show success toast
-      setToast({
-        message: `Devis ${statusLabels[newStatus as keyof typeof statusLabels]} avec succès`,
-        type: 'success',
-      })
-
-      // Refresh data
-      await fetchDevis()
-    } catch (err) {
-      setToast({
-        message: err instanceof Error ? err.message : 'Erreur lors de la mise à jour',
-        type: 'error',
-      })
-    }
-  }
-
-  const getStatusBadgeClasses = (status: string): string => {
-    switch (status) {
-      case 'en_attente':
-        return 'badge-attente'
-      case 'accepte':
-        return 'badge-accepte'
-      case 'refuse':
-        return 'badge-refuse'
-      default:
-        return 'badge-attente'
-    }
-  }
-
-  const getStatusLabel = (status: string): string => {
-    switch (status) {
-      case 'en_attente':
-        return 'En attente'
-      case 'accepte':
-        return 'Accepté'
-      case 'refuse':
-        return 'Refusé'
-      default:
-        return status
-    }
-  }
-
-  const calculateDaysWaiting = (dateEnvoi: string): number => {
-    const now = new Date()
-    const sent = new Date(dateEnvoi)
-    const diffTime = Math.abs(now.getTime() - sent.getTime())
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  }
-
-  if (loading && devis.length === 0) {
-    return (
-      <div className="min-h-screen bg-background flex">
-        <Sidebar />
-        <main className="flex-1 ml-[240px]">
-          <div className="flex items-center justify-center h-screen">
-            <div className="text-center">
-              <div className="spinner mx-auto mb-4"></div>
-              <p className="text-gray-600 text-sm">Chargement...</p>
-            </div>
-          </div>
-        </main>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-background flex">
-        <Sidebar />
-        <main className="flex-1 ml-[240px]">
-          <div className="flex items-center justify-center h-screen p-4">
-            <div className="max-w-md card-btp p-8">
-              <h3 className="text-red-600 font-semibold text-lg mb-3 font-primary">Erreur de connexion</h3>
-              <p className="text-gray-600 text-sm">{error}</p>
-              <button
-                onClick={fetchDevis}
-                className="mt-6 btn-primary w-full"
-              >
-                Réessayer
-              </button>
-            </div>
-          </div>
-        </main>
-      </div>
-    )
-  }
-
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen flex" style={{ background: '#F8F8F7' }}>
       <Sidebar />
 
-      <main className="flex-1 ml-[240px]">
-        {/* Toast Notification */}
-        {toast && (
-          <div className="fixed top-4 right-4 z-50 animate-slide-in">
+      <main className="flex-1" style={{ marginLeft: '236px' }}>
+        <div className="w-full" style={{ maxWidth: '1000px', margin: '0 auto', padding: '48px 40px 64px' }}>
+          {/* Titre */}
+          <h1
+            style={{
+              margin: 0,
+              fontSize: '28px',
+              fontWeight: 700,
+              letterSpacing: '-0.025em',
+            }}
+          >
+            Devis
+          </h1>
+
+          {/* Sous-titre */}
+          <p
+            style={{
+              margin: '10px 0 0',
+              fontSize: '16px',
+              lineHeight: 1.5,
+              color: '#56524A',
+              maxWidth: '600px',
+            }}
+          >
+            Tous vos devis en un endroit. Votre salarié <strong style={{ color: '#3F3C35' }}>📧 Relance</strong>{' '}
+            s'occupe tout seul de relancer ceux qui traînent.
+          </p>
+
+          {/* Stats cards */}
+          <div
+            style={{
+              marginTop: '26px',
+              display: 'flex',
+              gap: '12px',
+              flexWrap: 'wrap',
+            }}
+          >
             <div
-              className={`px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 font-primary ${
-                toast.type === 'success'
-                  ? 'bg-green-600 text-white'
-                  : 'bg-red-600 text-white'
-              }`}
+              style={{
+                background: '#FFFFFF',
+                border: '1px solid #ECEBE7',
+                borderRadius: '16px',
+                padding: '16px 20px',
+                minWidth: '150px',
+              }}
             >
-              {toast.type === 'success' ? (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              )}
-              <span className="font-medium">{toast.message}</span>
-            </div>
-          </div>
-        )}
-
-        {/* Header */}
-        <div className="border-b border-border bg-surface px-8 py-8 slide-in-left">
-          <div className="flex items-start justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-secondary font-primary tracking-tight mb-2">Devis</h1>
-              <p className="text-base text-gray-600">Gestion des devis clients</p>
-            </div>
-            <button
-              onClick={fetchDevis}
-              className="btn-secondary group flex items-center gap-2"
-            >
-              <svg
-                className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              <div
+                style={{
+                  fontSize: '24px',
+                  fontWeight: 800,
+                  letterSpacing: '-0.02em',
+                  color: '#B45309',
+                }}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-              Actualiser
-            </button>
-          </div>
-        </div>
+                14
+              </div>
+              <div
+                style={{
+                  fontSize: '12.5px',
+                  color: '#9A968D',
+                  marginTop: '3px',
+                }}
+              >
+                en attente
+              </div>
+            </div>
 
-        <div className="px-8 py-8">
-          {/* Stats Row */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="stat-card fade-in" style={{ animationDelay: '0.1s' }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="indicator-dot"></div>
-                <div className="text-sm font-medium text-gray-600 uppercase tracking-wide">
-                  Total Devis
-                </div>
+            <div
+              style={{
+                background: '#FFFFFF',
+                border: '1px solid #ECEBE7',
+                borderRadius: '16px',
+                padding: '16px 20px',
+                minWidth: '150px',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '24px',
+                  fontWeight: 800,
+                  letterSpacing: '-0.02em',
+                  color: '#23211D',
+                }}
+              >
+                182 000 €
               </div>
-              <div className="stat-number mb-2">{devis.length}</div>
+              <div
+                style={{
+                  fontSize: '12.5px',
+                  color: '#9A968D',
+                  marginTop: '3px',
+                }}
+              >
+                de valeur en jeu
+              </div>
             </div>
-            <div className="stat-card fade-in" style={{ animationDelay: '0.2s' }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="indicator-dot"></div>
-                <div className="text-sm font-medium text-gray-600 uppercase tracking-wide">
-                  En Attente
-                </div>
-              </div>
-              <div className="stat-number mb-2">
-                {devis.filter((d) => d.statut === 'en_attente').length}
-              </div>
-              <div className="text-sm text-gray-500">Action requise</div>
-            </div>
-            <div className="stat-card fade-in" style={{ animationDelay: '0.3s' }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="indicator-dot"></div>
-                <div className="text-sm font-medium text-gray-600 uppercase tracking-wide">
-                  Acceptés
-                </div>
-              </div>
-              <div className="stat-number mb-2">
-                {devis.filter((d) => d.statut === 'accepte').length}
-              </div>
-              <div className="text-sm text-gray-500">Validés</div>
-            </div>
-            <div className="stat-card fade-in" style={{ animationDelay: '0.4s' }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="indicator-dot"></div>
-                <div className="text-sm font-medium text-gray-600 uppercase tracking-wide">
-                  Refusés
-                </div>
-              </div>
-              <div className="stat-number mb-2">
-                {devis.filter((d) => d.statut === 'refuse').length}
-              </div>
-              <div className="text-sm text-gray-500">Non acceptés</div>
-            </div>
-          </div>
 
-          {/* Filters */}
-          <div className="mb-6 flex gap-2">
-            <button
-              onClick={() => setFilterStatus('all')}
-              className={`filter-btn ${
-                filterStatus === 'all' ? 'filter-btn-active' : ''
-              }`}
+            <div
+              style={{
+                background: '#FFFFFF',
+                border: '1px solid #ECEBE7',
+                borderRadius: '16px',
+                padding: '16px 20px',
+                minWidth: '150px',
+              }}
             >
-              Tous ({devis.length})
-            </button>
-            <button
-              onClick={() => setFilterStatus('en_attente')}
-              className={`filter-btn ${
-                filterStatus === 'en_attente' ? 'filter-btn-active' : ''
-              }`}
+              <div
+                style={{
+                  fontSize: '24px',
+                  fontWeight: 800,
+                  letterSpacing: '-0.02em',
+                  color: '#157347',
+                }}
+              >
+                16
+              </div>
+              <div
+                style={{
+                  fontSize: '12.5px',
+                  color: '#9A968D',
+                  marginTop: '3px',
+                }}
+              >
+                acceptés ce mois
+              </div>
+            </div>
+
+            <div
+              style={{
+                background: '#FFFFFF',
+                border: '1px solid #ECEBE7',
+                borderRadius: '16px',
+                padding: '16px 20px',
+                minWidth: '150px',
+              }}
             >
-              En attente ({devis.filter((d) => d.statut === 'en_attente').length})
-            </button>
-            <button
-              onClick={() => setFilterStatus('accepte')}
-              className={`filter-btn ${
-                filterStatus === 'accepte' ? 'filter-btn-active' : ''
-              }`}
-            >
-              Acceptés ({devis.filter((d) => d.statut === 'accepte').length})
-            </button>
-            <button
-              onClick={() => setFilterStatus('refuse')}
-              className={`filter-btn ${
-                filterStatus === 'refuse' ? 'filter-btn-active' : ''
-              }`}
-            >
-              Refusés ({devis.filter((d) => d.statut === 'refuse').length})
-            </button>
+              <div
+                style={{
+                  fontSize: '24px',
+                  fontWeight: 800,
+                  letterSpacing: '-0.02em',
+                  color: '#4655B0',
+                }}
+              >
+                11
+              </div>
+              <div
+                style={{
+                  fontSize: '12.5px',
+                  color: '#9A968D',
+                  marginTop: '3px',
+                }}
+              >
+                relancés par l'agent
+              </div>
+            </div>
           </div>
 
           {/* Table */}
-          <div className="card-btp overflow-hidden scale-in">
-            <div className="overflow-x-auto">
-              <table className="table-btp">
-                <thead>
-                  <tr>
-                    <th>Client</th>
-                    <th>Téléphone</th>
-                    <th>Montant</th>
-                    <th>Date d'envoi</th>
-                    <th>Jours d'attente</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredDevis.map((devisItem) => {
-                    const daysWaiting = calculateDaysWaiting(devisItem.date_envoi)
-                    const isUrgent = daysWaiting > 5
-                    return (
-                      <tr key={devisItem.id} className={isUrgent ? 'urgent' : ''}>
-                        <td className="whitespace-nowrap">
-                          <div className="text-sm font-semibold text-secondary">
-                            {devisItem.client_nom}
-                          </div>
-                        </td>
-                        <td className="whitespace-nowrap">
-                          <div className="text-sm text-gray-500">
-                            {devisItem.telephone || '-'}
-                          </div>
-                        </td>
-                        <td className="whitespace-nowrap">
-                          <div className="text-sm font-semibold tnum text-secondary">
-                            {Number(devisItem.montant).toLocaleString('fr-FR')}€
-                          </div>
-                        </td>
-                        <td className="whitespace-nowrap text-sm text-gray-500">
-                          {new Date(devisItem.date_envoi).toLocaleDateString('fr-FR')}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          <div className={`text-sm ${
-                            daysWaiting > 3 ? 'text-red-600 font-semibold' :
-                            daysWaiting >= 2 ? 'text-primary font-medium' :
-                            'text-green-600'
-                          }`}>
-                            {daysWaiting} jour{daysWaiting > 1 ? 's' : ''}
-                          </div>
-                        </td>
-                        <td className="whitespace-nowrap">
-                          <span className={getStatusBadgeClasses(devisItem.statut)}>
-                            {getStatusLabel(devisItem.statut)}
-                          </span>
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {devisItem.statut === 'en_attente' && (
-                            <div className="flex gap-2">
-                              <button
-                                onClick={() =>
-                                  updateDevisStatus(devisItem.id, 'accepte', devisItem.client_nom)
-                                }
-                                className="px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors font-primary"
-                              >
-                                Accepter
-                              </button>
-                              <button
-                                onClick={() =>
-                                  updateDevisStatus(devisItem.id, 'refuse', devisItem.client_nom)
-                                }
-                                className="px-3 py-1.5 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors font-primary"
-                              >
-                                Refuser
-                              </button>
-                            </div>
-                          )}
-                          {devisItem.statut !== 'en_attente' && (
-                            <button
-                              onClick={() =>
-                                updateDevisStatus(devisItem.id, 'en_attente', devisItem.client_nom)
-                              }
-                              className="btn-secondary text-xs"
-                            >
-                              Réinitialiser
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-
-              {filteredDevis.length === 0 && (
-                <div className="px-6 py-12 text-center">
-                  <p className="text-gray-500 text-sm">
-                    Aucun devis à afficher pour ce filtre
-                  </p>
-                </div>
-              )}
+          <div
+            style={{
+              marginTop: '22px',
+              background: '#FFFFFF',
+              border: '1px solid #ECEBE7',
+              borderRadius: '20px',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Header */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 120px 110px 100px',
+                gap: '14px',
+                padding: '16px 22px 12px',
+                fontSize: '10.5px',
+                fontWeight: 700,
+                letterSpacing: '0.05em',
+                color: '#B4B0A6',
+                textTransform: 'uppercase',
+              }}
+            >
+              <span>Client</span>
+              <span>Relances</span>
+              <span style={{ textAlign: 'right' }}>Montant</span>
+              <span style={{ textAlign: 'right' }}>Statut</span>
             </div>
+
+            {/* Rows */}
+            {devisData.map((devis, index) => (
+              <div
+                key={index}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 120px 110px 100px',
+                  gap: '14px',
+                  alignItems: 'center',
+                  padding: '14px 22px',
+                  borderTop: '1px solid #F1F0EC',
+                }}
+              >
+                {/* Client column */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    minWidth: 0,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '34px',
+                      height: '34px',
+                      borderRadius: '10px',
+                      background: '#F4F4F2',
+                      color: '#6F6B61',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {devis.initials}
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <div
+                      style={{
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {devis.client}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '12px',
+                        color: '#9A968D',
+                      }}
+                    >
+                      {devis.date}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Relances column */}
+                <div>
+                  {devis.relances && (
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        fontSize: '11.5px',
+                        fontWeight: 600,
+                        padding: '3px 9px',
+                        borderRadius: '9px',
+                        background: '#EEF1FB',
+                        color: '#4655B0',
+                      }}
+                    >
+                      {devis.relances}
+                    </span>
+                  )}
+                </div>
+
+                {/* Montant column */}
+                <div
+                  style={{
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    textAlign: 'right',
+                  }}
+                >
+                  {devis.montant}
+                </div>
+
+                {/* Statut column */}
+                <div style={{ textAlign: 'right' }}>
+                  <span
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      padding: '4px 10px',
+                      borderRadius: '9px',
+                      background: devis.statutStyle.bg,
+                      color: devis.statutStyle.color,
+                    }}
+                  >
+                    {devis.statut}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </main>
-
-      <style jsx global>{`
-        @keyframes slide-in {
-          from {
-            transform: translateX(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-
-        .animate-slide-in {
-          animation: slide-in 0.3s ease-out;
-        }
-      `}</style>
     </div>
   )
 }

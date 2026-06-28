@@ -52,6 +52,15 @@
   }
 }
 
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
 /* Loading Spinner */
 .spinner {
   width: 24px;
