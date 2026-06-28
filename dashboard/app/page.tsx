@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { supabase, Devis, Chantier } from '@/lib/supabase'
+import StatCard from '@/components/StatCard'
 import DevisTable from '@/components/DevisTable'
 import ChantiersTable from '@/components/ChantiersTable'
 import ChartsSection from '@/components/ChartsSection'
@@ -91,6 +92,17 @@ export default function Dashboard() {
   const totalCAWeek = weekChantiers.reduce((sum, c) => sum + Number(c.montant_devis), 0)
   const chantiersEnCours = chantiers.filter((c) => c.statut === 'en_cours').length
 
+  // Calculate changes (mock data - you can replace with real comparison)
+  const calculateChange = (current: number, comparison: number) => {
+    if (comparison === 0) return 0
+    return ((current - comparison) / comparison) * 100
+  }
+
+  // Mock previous period data for demo
+  const previousTotalPipeline = totalPipeline * 0.75
+  const previousDevisEnAttente = devisEnAttente.length * 0.85
+  const previousChantiersEnCours = chantiersEnCours * 0.95
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -105,7 +117,7 @@ export default function Dashboard() {
   if (error) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="card-btp p-8 max-w-md scale-in">
+        <div className="card p-8 max-w-md fade-in">
           <h3 className="text-lg font-semibold mb-3 text-red-600">
             Erreur de connexion
           </h3>
@@ -126,92 +138,118 @@ export default function Dashboard() {
 
       <main className="flex-1 ml-[240px]">
         {/* Header */}
-        <div className="border-b border-border px-8 py-8 bg-surface slide-in-left">
-          <div className="flex items-start justify-between">
+        <div className="border-b border-border px-8 py-6 bg-surface">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold mb-2 text-secondary font-primary tracking-tight">
-                Tableau de bord
+              <h1 className="text-3xl font-bold mb-1">
+                Dashboard
               </h1>
-              <p className="text-base text-gray-600">
+              <p className="text-sm text-gray-500">
                 {companyConfig.name}
               </p>
             </div>
-            <button onClick={fetchData} className="btn-secondary group flex items-center gap-2">
-              <svg
-                className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-              Actualiser
-            </button>
+
+            <div className="flex items-center gap-3">
+              {/* Period selector */}
+              <select className="input" style={{ width: 'auto', paddingRight: '2.5rem' }}>
+                <option>Last month</option>
+                <option>This month</option>
+                <option>This year</option>
+              </select>
+
+              <button onClick={fetchData} className="btn-secondary">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+                Refresh
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Stats Row - 4 cards with construction BTP styling */}
-        <div className="px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {/* Stat 1: Total Pipeline */}
-            <div className="stat-card fade-in" style={{ animationDelay: '0.1s' }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="indicator-dot"></div>
-                <div className="text-sm font-medium text-gray-600 uppercase tracking-wide">Pipeline Total</div>
-              </div>
-              <div className="stat-number mb-2">
-                {totalPipeline.toLocaleString('fr-FR')}€
-              </div>
-              <div className="text-sm text-gray-500">
-                {devis.length} devis au total
-              </div>
+        {/* Content */}
+        <div className="p-8">
+          {/* Overview Section */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold">Overview</h2>
             </div>
 
-            {/* Stat 2: Devis en attente */}
-            <div className="stat-card fade-in" style={{ animationDelay: '0.2s' }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="indicator-dot"></div>
-                <div className="text-sm font-medium text-gray-600 uppercase tracking-wide">En Attente</div>
-              </div>
-              <div className="stat-number mb-2">
-                {devisEnAttente.length}
-              </div>
-              <div className="text-sm text-gray-500">
-                {totalDevisEnAttente.toLocaleString('fr-FR')}€
-              </div>
-            </div>
+            {/* Stats Grid - 4 cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+              {/* Stat 1: Total Clients */}
+              <StatCard
+                title="Customers"
+                value={devis.length}
+                change={{
+                  value: calculateChange(devis.length, previousTotalPipeline / 50000),
+                  period: 'vs last month'
+                }}
+                subtitle="vs last month"
+                icon={
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                }
+              />
 
-            {/* Stat 3: Chantiers cette semaine */}
-            <div className="stat-card fade-in" style={{ animationDelay: '0.3s' }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="indicator-dot"></div>
-                <div className="text-sm font-medium text-gray-600 uppercase tracking-wide">Cette Semaine</div>
-              </div>
-              <div className="stat-number mb-2">
-                {weekChantiers.length}
-              </div>
-              <div className="text-sm text-gray-500">
-                {totalCAWeek.toLocaleString('fr-FR')}€ prévu
-              </div>
-            </div>
+              {/* Stat 2: Balance (Pipeline) */}
+              <StatCard
+                title="Balance"
+                value={`${(totalPipeline / 1000).toFixed(0)}k`}
+                change={{
+                  value: calculateChange(totalPipeline, previousTotalPipeline),
+                  period: 'vs last month'
+                }}
+                subtitle="vs last month"
+                icon={
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                }
+              />
 
-            {/* Stat 4: Chantiers en cours */}
-            <div className="stat-card fade-in" style={{ animationDelay: '0.4s' }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="indicator-dot"></div>
-                <div className="text-sm font-medium text-gray-600 uppercase tracking-wide">En Cours</div>
-              </div>
-              <div className="stat-number mb-2">
-                {chantiersEnCours}
-              </div>
-              <div className="text-sm text-gray-500">
-                Chantiers actifs
-              </div>
+              {/* Stat 3: Pending Quotes */}
+              <StatCard
+                title="Pending"
+                value={devisEnAttente.length}
+                change={{
+                  value: calculateChange(devisEnAttente.length, previousDevisEnAttente),
+                  period: 'vs last month'
+                }}
+                subtitle={`${(totalDevisEnAttente / 1000).toFixed(0)}k€ value`}
+                icon={
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                }
+              />
+
+              {/* Stat 4: Active Sites */}
+              <StatCard
+                title="Active"
+                value={chantiersEnCours}
+                change={{
+                  value: calculateChange(chantiersEnCours, previousChantiersEnCours),
+                  period: 'vs last month'
+                }}
+                subtitle="construction sites"
+                icon={
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                }
+              />
             </div>
           </div>
 
