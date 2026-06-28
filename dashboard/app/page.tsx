@@ -137,37 +137,40 @@ export default function Dashboard() {
       <Sidebar />
 
       <main className="flex-1 ml-[240px]">
-        {/* Header */}
-        <div className="border-b border-border px-8 py-6 bg-surface">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold mb-1">
+        {/* Header - Industrial Style */}
+        <div className="border-b-2 border-border px-8 py-8 bg-surface relative overflow-hidden">
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/[0.02] pointer-events-none" />
+
+          <div className="flex items-center justify-between relative z-10">
+            <div className="slide-in-left">
+              <h1 className="text-4xl font-black mb-2" style={{ fontFamily: 'var(--font-display)' }}>
                 Dashboard
               </h1>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
                 {companyConfig.name}
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 fade-in" style={{ animationDelay: '0.2s' }}>
               {/* Period selector */}
-              <select className="input" style={{ width: 'auto', paddingRight: '2.5rem' }}>
+              <select className="input" style={{ width: 'auto', minWidth: '140px', paddingRight: '2.5rem' }}>
                 <option>Last month</option>
                 <option>This month</option>
                 <option>This year</option>
               </select>
 
-              <button onClick={fetchData} className="btn-secondary">
+              <button onClick={fetchData} className="btn-secondary group">
                 <svg
-                  className="w-4 h-4"
+                  className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  strokeWidth={2}
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                   />
                 </svg>
@@ -181,11 +184,13 @@ export default function Dashboard() {
         <div className="p-8">
           {/* Overview Section */}
           <div className="mb-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold">Overview</h2>
+            <div className="flex items-center justify-between mb-6 fade-in">
+              <h2 className="text-xl font-semibold" style={{ fontFamily: 'var(--font-display)' }}>
+                Overview
+              </h2>
             </div>
 
-            {/* Stats Grid - 4 cards */}
+            {/* Stats Grid - 4 cards with staggered animations */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
               {/* Stat 1: Total Clients */}
               <StatCard
@@ -196,6 +201,7 @@ export default function Dashboard() {
                   period: 'vs last month'
                 }}
                 subtitle="vs last month"
+                delay={1}
                 icon={
                   <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -212,6 +218,7 @@ export default function Dashboard() {
                   period: 'vs last month'
                 }}
                 subtitle="vs last month"
+                delay={2}
                 icon={
                   <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -228,6 +235,7 @@ export default function Dashboard() {
                   period: 'vs last month'
                 }}
                 subtitle={`${(totalDevisEnAttente / 1000).toFixed(0)}k€ value`}
+                delay={3}
                 icon={
                   <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -244,6 +252,7 @@ export default function Dashboard() {
                   period: 'vs last month'
                 }}
                 subtitle="construction sites"
+                delay={4}
                 icon={
                   <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />

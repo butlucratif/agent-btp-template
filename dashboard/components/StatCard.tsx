@@ -8,6 +8,7 @@ interface StatCardProps {
   subtitle?: string
   icon?: React.ReactNode
   trend?: 'up' | 'down' | 'neutral'
+  delay?: number
 }
 
 export default function StatCard({
@@ -16,7 +17,8 @@ export default function StatCard({
   change,
   subtitle,
   icon,
-  trend = 'neutral'
+  trend = 'neutral',
+  delay = 0
 }: StatCardProps) {
   // Format value if it's a number
   const formattedValue = typeof value === 'number'
@@ -28,8 +30,11 @@ export default function StatCard({
   const isNegative = change && change.value < 0
 
   return (
-    <div className="stat-card fade-in">
-      {/* Header */}
+    <div
+      className="stat-card fade-in"
+      style={{ animationDelay: `${delay * 100}ms` }}
+    >
+      {/* Header with icon */}
       <div className="stat-header">
         <span className="stat-title">{title}</span>
         {icon && (
@@ -39,29 +44,39 @@ export default function StatCard({
         )}
       </div>
 
-      {/* Value - HUGE */}
+      {/* HUGE Monospace Value */}
       <div className="stat-value">
         {formattedValue}
       </div>
 
       {/* Change badge + Subtitle */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-wrap">
         {change && (
           <span className={`stat-badge ${isNegative ? 'negative' : ''}`}>
-            {/* Arrow icon */}
+            {/* Arrow SVG */}
             <svg
-              className="w-3 h-3"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              strokeWidth={2.5}
             >
               {isPositive ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                // Up arrow
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                />
               ) : isNegative ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                // Down arrow
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
+                />
               ) : null}
             </svg>
-            {Math.abs(change.value).toFixed(1)}%
+            {isPositive ? '+' : ''}{change.value.toFixed(1)}%
           </span>
         )}
 
