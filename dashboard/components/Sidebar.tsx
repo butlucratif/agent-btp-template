@@ -156,55 +156,6 @@ export default function Sidebar() {
           </div>
         ))}
       </nav>
-
-      {/* Bottom Section */}
-      <div
-        style={{
-          marginTop: 'auto',
-          padding: '16px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '11px',
-        }}
-      >
-        <div
-          style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            background: '#23211D',
-            color: '#fff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '12px',
-            fontWeight: 700,
-          }}
-        >
-          ML
-        </div>
-        <div style={{ minWidth: 0 }}>
-          <div
-            style={{
-              fontSize: '12.5px',
-              fontWeight: 600,
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
-            Maçonnerie Léon
-          </div>
-          <div
-            style={{
-              fontSize: '11px',
-              color: '#9A968D',
-            }}
-          >
-            Patron
-          </div>
-        </div>
-      </div>
     </aside>
   )
 }
