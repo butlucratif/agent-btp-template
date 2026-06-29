@@ -6,40 +6,40 @@ import Sidebar from '@/components/Sidebar'
 const chantiersData = [
   {
     nom: 'Extension Pavillon Particulier',
-    montant: '38 000 €',
-    heures: '82 h pointées',
+    montant: '2 450 €',
+    heures: '24 h pointées',
     avancement: 65,
     rentabilite: '+26 %',
     barColor: '#10B981', // green
   },
   {
     nom: 'Rénovation Cuisine Restaurant',
-    montant: '24 500 €',
-    heures: '54 h pointées',
+    montant: '1 850 €',
+    heures: '22 h pointées',
     avancement: 48,
     rentabilite: '+23 %',
     barColor: '#E0A93B', // orange
   },
   {
     nom: 'Toiture Maison Individuelle',
-    montant: '18 900 €',
-    heures: '36 h pointées',
+    montant: '1 650 €',
+    heures: '20 h pointées',
     avancement: 35,
     rentabilite: '+21 %',
     barColor: '#E0A93B', // orange
   },
   {
     nom: 'Terrasse Jardin Particulier',
-    montant: '12 400 €',
-    heures: '22 h pointées',
+    montant: '1 200 €',
+    heures: '18 h pointées',
     avancement: 28,
     rentabilite: '+24 %',
     barColor: '#E0A93B', // orange
   },
   {
     nom: 'Reprise Façade Boutique',
-    montant: '28 700 €',
-    heures: '18 h pointées',
+    montant: '1 950 €',
+    heures: '21 h pointées',
     avancement: 15,
     rentabilite: '+26 %',
     barColor: '#7C86D6', // blue
@@ -165,7 +165,7 @@ export default function ChantiersPage() {
                   color: '#23211D',
                 }}
               >
-                122 500 €
+                9 100 €
               </div>
               <div
                 style={{

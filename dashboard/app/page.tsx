@@ -105,7 +105,7 @@ export default function Dashboard() {
       status: 'actif' as const,
       report: "J'ai relancé 8 clients qui n'avaient pas répondu à leur devis. 2 m'ont déjà rappelé.",
       stat1: { value: '34', label: 'devis relancés ce mois' },
-      stat2: { value: '+42 300 €', label: 'récupérés', isMoney: true },
+      stat2: { value: '+3 850 €', label: 'récupérés', isMoney: true },
       nextAction: 'Prochaine relance ce soir à 20h',
     },
     {
@@ -125,7 +125,7 @@ export default function Dashboard() {
       status: 'actif' as const,
       report: "J'ai repéré 2 devis qui traînaient depuis trop longtemps et je vous les ai signalés avant qu'ils ne soient perdus.",
       stat1: { value: '17', label: 'devis sauvés à temps' },
-      stat2: { value: '+28 900 €', label: 'évités de perdre', isMoney: true },
+      stat2: { value: '+2 650 €', label: 'évités de perdre', isMoney: true },
       nextAction: 'Je surveille en continu',
     },
     {
@@ -144,7 +144,7 @@ export default function Dashboard() {
       role: 'Calcule vos revenus',
       status: 'pause' as const,
       report: "Je me repose. Chaque lundi matin, je calcule combien vous allez gagner dans la semaine.",
-      stat1: { value: '167 400 €', label: 'prévus ce mois', isMoney: true },
+      stat1: { value: '18 200 €', label: 'prévus ce mois', isMoney: true },
       stat2: { value: '8', label: 'rapports envoyés' },
       nextAction: 'Je reprends lundi à 8h',
     },

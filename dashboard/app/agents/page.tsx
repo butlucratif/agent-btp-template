@@ -13,7 +13,7 @@ const agentsDetail = [
     statusLabel: 'Au travail',
     report: "J'ai relancé 8 clients qui n'avaient pas répondu à leur devis. 2 m'ont déjà rappelé.",
     stat1: { value: '34', label: 'devis relancés ce mois', color: '#23211D' },
-    stat2: { value: '+42 300 €', label: 'récupérés', color: '#157347' },
+    stat2: { value: '+3 850 €', label: 'récupérés', color: '#157347' },
     activity: [
       { time: 'Auj. 14:02', text: 'Relance envoyée à M. Leclerc' },
       { time: 'Auj. 09:15', text: '3 relances groupées' },
@@ -49,7 +49,7 @@ const agentsDetail = [
     statusLabel: 'Au travail',
     report: "J'ai repéré 2 devis qui traînaient depuis trop longtemps et je vous les ai signalés avant qu'ils ne soient perdus.",
     stat1: { value: '17', label: 'devis sauvés à temps', color: '#23211D' },
-    stat2: { value: '+28 900 €', label: 'évités de perdre', color: '#157347' },
+    stat2: { value: '+2 650 €', label: 'évités de perdre', color: '#157347' },
     activity: [
       { time: 'Auj. 13:40', text: 'Alerte : devis SCI La Fontaine (J+6)' },
       { time: 'Auj. 07:40', text: 'Aucun devis critique' },
@@ -84,11 +84,11 @@ const agentsDetail = [
     status: 'pause' as const,
     statusLabel: 'En pause',
     report: "Je me repose. Chaque lundi matin, je calcule combien vous allez gagner dans la semaine.",
-    stat1: { value: '167 400 €', label: 'prévus ce mois', color: '#157347' },
+    stat1: { value: '18 200 €', label: 'prévus ce mois', color: '#157347' },
     stat2: { value: '8', label: 'rapports envoyés', color: '#23211D' },
     activity: [
-      { time: 'Lundi 08:00', text: 'CA hebdo calculé : 33 500 €' },
-      { time: 'Lun. préc.', text: 'CA hebdo : 31 200 €' },
+      { time: 'Lundi 08:00', text: 'CA hebdo calculé : 4 200 €' },
+      { time: 'Lun. préc.', text: 'CA hebdo : 3 800 €' },
       { time: 'En pause', text: 'Reprise lundi' },
     ],
     buttonText: 'Réactiver le salarié',

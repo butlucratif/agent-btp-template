@@ -9,7 +9,7 @@ const devisData = [
     client: 'M. et Mme Leclerc',
     date: 'Envoyé le 18 juin',
     relances: '📧 2×',
-    montant: '18 500 €',
+    montant: '1 850 €',
     statut: 'En attente',
     statutStyle: {
       bg: '#FCF3E6',
@@ -21,7 +21,7 @@ const devisData = [
     client: 'Entreprise Bâti-Rénov',
     date: 'Envoyé le 21 juin',
     relances: '📧 1×',
-    montant: '12 300 €',
+    montant: '1 280 €',
     statut: 'En attente',
     statutStyle: {
       bg: '#FCF3E6',
@@ -33,7 +33,7 @@ const devisData = [
     client: 'SCI La Fontaine',
     date: 'Envoyé le 24 juin',
     relances: '📧 1×',
-    montant: '24 800 €',
+    montant: '2 100 €',
     statut: 'En attente',
     statutStyle: {
       bg: '#FCF3E6',
@@ -45,7 +45,7 @@ const devisData = [
     client: 'Pharmacie Durand',
     date: 'Envoyé le 25 juin',
     relances: null,
-    montant: '8 900 €',
+    montant: '850 €',
     statut: 'En attente',
     statutStyle: {
       bg: '#FCF3E6',
@@ -57,7 +57,7 @@ const devisData = [
     client: 'Famille Martin',
     date: 'Envoyé le 26 juin',
     relances: null,
-    montant: '15 200 €',
+    montant: '1 450 €',
     statut: 'En attente',
     statutStyle: {
       bg: '#FCF3E6',
@@ -69,7 +69,7 @@ const devisData = [
     client: 'Villa Beaumont',
     date: 'Envoyé le 14 juin',
     relances: null,
-    montant: '22 400 €',
+    montant: '1 950 €',
     statut: 'Accepté',
     statutStyle: {
       bg: '#F0FBF4',
@@ -81,7 +81,7 @@ const devisData = [
     client: 'Café Bistrot Central',
     date: 'Envoyé le 12 juin',
     relances: null,
-    montant: '6 800 €',
+    montant: '680 €',
     statut: 'Accepté',
     statutStyle: {
       bg: '#F0FBF4',
@@ -93,7 +93,7 @@ const devisData = [
     client: 'Bureau Comptable',
     date: 'Envoyé le 20 juin',
     relances: null,
-    montant: '19 700 €',
+    montant: '1 650 €',
     statut: 'Envoyé',
     statutStyle: {
       bg: '#EEF1FB',
@@ -105,7 +105,7 @@ const devisData = [
     client: 'Copro. Les Peupliers',
     date: 'Envoyé le 10 juin',
     relances: null,
-    montant: '11 200 €',
+    montant: '1 120 €',
     statut: 'Refusé',
     statutStyle: {
       bg: '#F4F4F2',
@@ -203,7 +203,7 @@ export default function DevisPage() {
                   color: '#23211D',
                 }}
               >
-                79 700 €
+                12 930 €
               </div>
               <div
                 style={{
